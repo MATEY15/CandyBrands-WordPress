@@ -24,7 +24,7 @@
 <header class="header" id="header">
     <div class="header__wrapper layout">
         <div class="header__menu">
-            <?php my_nav_menu( [ 'top'  => 'Новое меню 2' ] ); ?>
+            <?php my_nav_menu( [ 'theme_location'  => 'top' ] ); ?>
         </div>
         <div class="header__logo">
             <a class="logo" href="<?php home_url(); ?>">

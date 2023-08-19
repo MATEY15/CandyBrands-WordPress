@@ -3,11 +3,19 @@
 add_action('wp_enqueue_scripts', 'style_theme');
 add_action('wp_footer', 'scripts_theme');
 add_action( 'after_setup_theme', 'theme_register_nav_menu' );
+//add_action( 'after_setup_theme', 'menu_names' );
 
 function theme_register_nav_menu() {
-    register_nav_menu( 'footer1', 'Меню в подвале 1' );
-    register_nav_menu( 'footer2', 'Меню в подвале 2' );
-    register_nav_menu( 'footer3', 'Меню в подвале 3' );
+    register_nav_menu( 'top', 'menu_header' );
+    register_nav_menu( 'footer1', 'menu_footer1' );
+    register_nav_menu( 'footer2', 'menu_footer2' );
+    register_nav_menu( 'footer3', 'menu_footer3' );
+}
+
+function menu_names($name) {
+    $theme_locations = get_nav_menu_locations();
+    $menu_obj = get_term( $theme_locations[$name], 'nav_menu' );
+    return $menu_obj->name;
 }
 
 function style_theme() {

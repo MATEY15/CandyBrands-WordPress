@@ -5,23 +5,23 @@
             <div class="footer__description"><p> Текст с политикой конфиденциальности. Мы любим свое дело и ежедневно
                     делимся своей любовью. </p></div>
             <div class="footer__menu">
-                <div class="footer__menu-item"><h4>Каталог</h4>
-                    <ul>
-                        <li><a href="#">Новинки</a></li>
-                        <li><a href="#">Ассортимент</a></li>
-                    </ul>
+                <div class="footer__menu-item">
+                    <h4><?php echo menu_names('footer1'); ?></h4>
+                    <?php wp_nav_menu( [
+                        'theme_location'  => 'footer1',
+                    ] ); ?>
                 </div>
-                <div class="footer__menu-item"><h4>Мы</h4>
-                    <ul>
-                        <li><a href="#">Промо ролик</a></li>
-                        <li><a href="#">О нас</a></li>
-                    </ul>
+                <div class="footer__menu-item">
+                    <h4><?php echo menu_names('footer2'); ?></h4>
+                    <?php wp_nav_menu( [
+                        'theme_location'  => 'footer2',
+                    ] ); ?>
                 </div>
-                <div class="footer__menu-item"><h4>Купить</h4>
-                    <ul>
-                        <li><a href="#">Сотрудничество</a></li>
-                        <li><a href="#">Wildberries</a></li>
-                    </ul>
+                <div class="footer__menu-item">
+                    <h4><?php echo menu_names('footer3'); ?></h4>
+                    <?php wp_nav_menu( [
+                        'theme_location'  => 'footer3',
+                    ] ); ?>
                 </div>
                 <div class="footer__menu-item"><h4>ООО «Кэндифлоу»</h4>
                     <ul>
