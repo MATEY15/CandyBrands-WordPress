@@ -12,7 +12,7 @@ Template Name: Home Page
                 <div class="candy-preview__image">
                     <picture>
                         <source type="image/png" media="(max-width: 480px)"
-                                srcset="<?php echo get_field('image__preview_1x_mobile'); ?>, <?php echo get_field('image__preview_3x_mobile'); ?> 3x">
+                                srcset="<?php echo get_field('image__preview_1x_mobile'); ?> 1x, <?php echo get_field('image__preview_3x_mobile'); ?> 3x">
                         <source type="image/png"
                                 srcset="<?php echo get_field('image__preview_1x'); ?>, <?php echo get_field('image__preview_3x'); ?> 3x">
                         <img src="<?php echo get_field('image__preview_3x'); ?>" width="1172" alt="Candy Preview" class="candy-preview__img"></picture>
@@ -194,33 +194,52 @@ Template Name: Home Page
             </div>
         </div>
     </div>
+    <?php if( get_field('video_if_show') ): ?>
     <div class="video-preview">
         <div class="video-preview__marquee" data-slide="left">
-            <div class="video-preview__marquee-item brodway-font"><span> <img class="icon-marquee"
-                                                                              src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt=""> Кислица </span>
-                <span> <img class="icon-marquee" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt=""> Candy with hype </span>
-                <span> <img class="icon-marquee" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt=""> Кислица </span> <span> <img
-                        class="icon-marquee" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt=""> Candy with hype </span> <span> <img
-                        class="icon-marquee" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt=""> Кислица </span> <span> <img
-                        class="icon-marquee" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt=""> Candy with hype </span></div>
+            <div class="video-preview__marquee-item brodway-font">
+                <span>
+                    <img class="icon-marquee" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt="">
+                    Кислица
+                </span>
+                <span>
+                    <img class="icon-marquee" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt="">
+                    Candy with hype
+                </span>
+                <span>
+                    <img class="icon-marquee" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt="">
+                    Кислица
+                </span>
+                <span>
+                    <img class="icon-marquee" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt="">
+                    Candy with hype
+                </span>
+                <span>
+                    <img class="icon-marquee" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt="">
+                    Кислица
+                </span>
+                <span>
+                    <img class="icon-marquee" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt="">
+                    Candy with hype
+                </span>
+            </div>
         </div>
         <div class="video-preview__wrapper layout">
             <div class="video-preview__present">
                 <div class="video-preview__main-wrapper"><a href="#" class="video-preview__main-close">
                         <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
-                            <path d="M12.8 38L10 35.2L21.2 24L10 12.8L12.8 10L24 21.2L35.2 10L38 12.8L26.8 24L38 35.2L35.2 38L24 26.8L12.8 38Z"
-                                  fill="#ffffff"></path>
+                            <path d="M12.8 38L10 35.2L21.2 24L10 12.8L12.8 10L24 21.2L35.2 10L38 12.8L26.8 24L38 35.2L35.2 38L24 26.8L12.8 38Z" fill="#ffffff"></path>
                         </svg>
                     </a>
                     <video class="video-preview__main" controls preload="auto" width="100%" height="100%">
-                        <source src="/video/video.mp4?31c04c69"/>
+                        <source src="<?php echo get_field('video_file'); ?>"/>
                     </video>
                 </div>
                 <div class="video-preview__present-image">
                     <picture>
-                        <source type="image/png"
-                                srcset="<?php echo bloginfo('stylesheet_directory'); ?>/img/video/video-background-1x.png, <?php echo bloginfo('stylesheet_directory'); ?>/img/video/video-background-3x.png 3x">
-                        <img src="<?php echo bloginfo('stylesheet_directory'); ?>/img/video/video-background-3x.png" width="1280" alt="Candy Preview"></picture>
+                        <source type="image/png" srcset="<?php echo get_field('video_baner_1x'); ?> 1x, <?php echo get_field('video_baner_3x'); ?> 3x">
+                        <img src="<?php echo get_field('video_baner_3x'); ?>" width="1280" alt="Candy Preview">
+                    </picture>
                 </div>
                 <div class="video-preview__button-wrapper"><a href="#" class="video-popup video-preview__button"> <span> <svg
                                 width="61" height="60" viewBox="0 0 61 60" fill="none" xmlns="http://www.w3.org/2000/svg"> <path
@@ -243,109 +262,143 @@ Template Name: Home Page
                         class="icon-marquee" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt=""> Candy with hype </span></div>
         </div>
     </div>
+    <?php endif; ?>
+
+    <?php if( get_field('about_if_show') ): ?>
     <div class="about">
         <div class="about__wrapper layout">
             <div class="image-border image-border--left about__image">
                 <div class="image-border__wrapper">
                     <picture>
-                        <source type="image/png"
-                                srcset="<?php echo bloginfo('stylesheet_directory'); ?>/img/about/about-image-1x.png, <?php echo bloginfo('stylesheet_directory'); ?>/img/about/about-image-3x.png 3x">
-                        <img src="<?php echo bloginfo('stylesheet_directory'); ?>/img/about/about-image-3x.png" width="502" alt="Candy Preview"></picture>
+                        <source type="image/png" srcset="<?php echo get_field('about_image_1x'); ?> 1x, <?php echo get_field('about_image_3x'); ?> 3x">
+                        <img src="<?php echo get_field('about_image_3x'); ?>" width="502" alt="<?php echo get_field('about_title'); ?>">
+                    </picture>
                 </div>
             </div>
-            <div class="about__content"><h3 class="h2-style"><img class="icon-heading" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg"
-                                                                  alt=""> О нас </h3>
-                <div class="about__content-text"><p><strong>Сладости Candy Brands</strong> — не просто конфеты,
-                        жевательная резинка и мармелад. Это сладкое приключение, которое способно уместиться в кармане,
-                        раскрасить серый день, удивить и обрадовать. Стать началом крепкой дружбы, сделать праздник еще
-                        ярче. </p>
-                    <p><strong>Команда Candy Brands</strong> — не просто случайные люди. Мы гибкие, энергичные,
-                        инициативные. Быстро принимаем решения и горим своим делом. Открыты для новых идей и интересных
-                        предложений. </p></div>
+            <div class="about__content">
+                <h3 class="h2-style">
+                    <img class="icon-heading" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt="">
+                    <?php echo get_field('about_title'); ?>
+                </h3>
+                <div class="about__content-text">
+                    <?php echo get_field('about_desc'); ?>
+                </div>
             </div>
         </div>
     </div>
+    <?php endif; ?>
+
+    <?php if( get_field('brands_if_show') ): ?>
     <div class="brands">
         <div class="layout">
-            <div class="brands__heading"><h3 class="h2-style">Торговые марки</h3></div>
-            <div class="brands__wrapper"><a href="" class="brands__item">
-                    <picture>
-                        <source type="image/png" srcset="<?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-1-1x.png, <?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-1-3x.png 3x">
-                        <img src="<?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-1-3x.png" width="198" alt="Brands"></picture>
-                </a> <a href="" class="brands__item">
-                    <picture>
-                        <source type="image/png" srcset="<?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-2-1x.png, <?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-2-3x.png 3x">
-                        <img src="<?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-2-3x.png" width="198" alt="Brands"></picture>
-                </a> <a href="" class="brands__item">
-                    <picture>
-                        <source type="image/png" srcset="<?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-3-1x.png, <?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-3-3x.png 3x">
-                        <img src="<?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-3-3x.png" width="198" alt="Brands"></picture>
-                </a> <a href="" class="brands__item">
-                    <picture>
-                        <source type="image/png" srcset="<?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-4-1x.png, <?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-4-3x.png 3x">
-                        <img src="<?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-4-3x.png" width="198" alt="Brands"></picture>
-                </a> <a href="" class="brands__item">
-                    <picture>
-                        <source type="image/png" srcset="<?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-5-1x.png, <?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-5-3x.png 3x">
-                        <img src="<?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-5-3x.png" width="198" alt="Brands"></picture>
-                </a> <a href="" class="brands__item">
-                    <picture>
-                        <source type="image/png" srcset="<?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-6-1x.png, <?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-6-3x.png 3x">
-                        <img src="<?php echo bloginfo('stylesheet_directory'); ?>/img/brands/brands-6-3x.png" width="198" alt="Brands"></picture>
-                </a></div>
+            <div class="brands__heading">
+                <h3 class="h2-style"><?php echo get_field('brands_title'); ?></h3>
+            </div>
+            <div class="brands__wrapper">
+
+                <?php  if( have_rows('brands_reapet') ): ?>
+                    <?php while ( have_rows('brands_reapet') ) : the_row(); ?>
+
+                        <?php
+                            $link = get_sub_field('brands_link');
+                        ?>
+
+                        <?php  if( $link ): ?>
+                            <a href="<?php the_sub_field('brands_link'); ?>" target="_blank" class="brands__item">
+                                <picture>
+                                    <source type="image/png" srcset="<?php the_sub_field('brands_image_1x'); ?> 1x, <?php the_sub_field('brands_image_3x'); ?> 3x">
+                                    <img src="<?php the_sub_field('brands_image_3x'); ?>" width="198" alt="<?php the_sub_field('brands_alt'); ?>">
+                                </picture>
+                            </a>
+                        <?php else: ?>
+                            <span class="brands__item">
+                                <picture>
+                                    <source type="image/png" srcset="<?php the_sub_field('brands_image_1x'); ?> 1x, <?php the_sub_field('brands_image_3x'); ?> 3x">
+                                    <img src="<?php the_sub_field('brands_image_3x'); ?>" width="198" alt="<?php the_sub_field('brands_alt'); ?>">
+                                </picture>
+                            </span>
+                        <?php endif; ?>
+                    <?php endwhile; ?>
+                <?php endif; ?>
+
+            </div>
         </div>
     </div>
+    <?php endif; ?>
+
+    <?php if( get_field('question_if_show') ): ?>
     <div class="question">
         <div class="layout">
-            <div class="question__heading"><h3 class="h2-style"><img class="icon-heading" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg"
-                                                                     alt=""> Вопросы </h3></div>
+            <div class="question__heading">
+                <h3 class="h2-style">
+                    <img class="icon-heading" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt="">
+                    <?php echo get_field('question_title'); ?>
+                </h3>
+            </div>
             <div class="question__wrapper">
-                <div class="accordion__item">
-                    <div class="accordion__title"> Чем занимается CandyBrands? <span class="icon-rotate"> <svg
-                                class="icon-arrow-rotate" width="39px" height="39px"> <use
-                                    xlink:href="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-arrow-rotate"></use> </svg> </span></div>
-                    <div class="accordion__description"><p> Мы занимаемся разработкой и оптовыми продажами кондитерских
-                            изделий для детей и подростков. Ознакомиться с нашей продукцией вы можете в каталоге. </p></div>
-                </div>
-                <div class="accordion__item">
-                    <div class="accordion__title"> Продукция CandyBrands сертифицирована? <span class="icon-rotate"> <svg
-                                class="icon-arrow-rotate" width="39px" height="39px"> <use
-                                    xlink:href="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-arrow-rotate"></use> </svg> </span></div>
-                    <div class="accordion__description"><p> Качество нашей продукции подтверждено необходимыми
-                            сертификатами. </p></div>
-                </div>
-                <div class="accordion__item">
-                    <div class="accordion__title"> Как начать сотрудничество с CandyBrands? <span class="icon-rotate"> <svg
-                                class="icon-arrow-rotate" width="39px" height="39px"> <use
-                                    xlink:href="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-arrow-rotate"></use> </svg> </span></div>
-                    <div class="accordion__description"><p> Оставьте заявку в форме обратной связи и мы вам обязательно
-                            позвоним. </p></div>
-                </div>
-                <div class="accordion__item">
-                    <div class="accordion__title"> Где купить продукцию CandyBrands? <span class="icon-rotate"> <svg
-                                class="icon-arrow-rotate" width="39px" height="39px"> <use
-                                    xlink:href="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-arrow-rotate"></use> </svg> </span></div>
-                    <div class="accordion__description"><p> Физические лица могут заказать наши товары на Wildberries
-                            <br>Индивидуальные предприниматели и юридические лица могут сделать заказ, оставив заявку в
-                            форме обратной связи — с вами свяжется наш менеджер для уточнения деталей. </p></div>
-                </div>
+
+                <?php  if( have_rows('question_repeat') ): ?>
+                    <?php while ( have_rows('question_repeat') ) : the_row(); ?>
+                    <div class="accordion__item">
+                        <div class="accordion__title">
+                            <?php the_sub_field('question_what'); ?>
+                            <span class="icon-rotate">
+                                <svg class="icon-arrow-rotate" width="39px" height="39px">
+                                    <use xlink:href="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-arrow-rotate"></use>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="accordion__description">
+                            <p><?php the_sub_field('question_mess'); ?></p>
+                        </div>
+                    </div>
+                    <?php endwhile; ?>
+                <?php endif; ?>
+
             </div>
         </div>
     </div>
+    <?php endif; ?>
+
+    <?php if( get_field('casecart_if_show') ): ?>
     <div class="case-cart">
         <div class="case-cart__wrapper layout">
-            <div class="case-cart__item"><a href="#" class="case-cart__preview case-cart__preview--purple"> <span
-                        class="icon-rotate"> <svg class="icon-arrow-rotate" width="39px" height="39px"> <use
-                                xlink:href="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-arrow-rotate"></use> </svg> </span>
-                    <p class="case-cart__sub-title">Купить</p> <h4 class="case-cart__title"> WIldberries </h4></a></div>
-            <div class="case-cart__item"><a href="#"
-                                            class="case-cart__preview case-cart__preview--cblack case-cart__preview--orange">
-                <span class="icon-rotate"> <svg class="icon-arrow-rotate" width="39px" height="39px"> <use
-                            xlink:href="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-arrow-rotate"></use> </svg> </span>
-                    <p class="case-cart__sub-title">Каталог</p> <h4 class="case-cart__title"> Скоро в&nbsp;продаже </h4></a>
-            </div>
+
+            <?php  if( have_rows('casecart_add_row') ): ?>
+                <?php while ( have_rows('casecart_add_row') ) : the_row(); ?>
+
+                <div class="case-cart__item">
+
+                    <?php  if( have_rows('casecart_add_item') ): ?>
+                        <?php while ( have_rows('casecart_add_item') ) : the_row(); ?>
+                            <?php
+                                $color = get_sub_field('casecart_style');
+                                $height = get_sub_field('casecart_block_big');
+                            ?>
+                    <a href="<?php the_sub_field('casecart_link'); ?>"
+                       class="case-cart__preview <?php  if( $color === 'black' ): ?>case-cart__preview--cblack<?php else: ?>case-cart__preview--cwhite<?php endif; ?> <?php  if( $height ): ?>case-cart__preview--big<?php endif; ?>"
+                       style="
+                               background-image: url(<?php the_sub_field('casecart_image'); ?>);
+                               background-color: <?php the_sub_field('casecart_color'); ?>;
+                               "
+                    >
+                        <span class="icon-rotate"> <svg class="icon-arrow-rotate" width="39px" height="39px">
+                                <use xlink:href="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-arrow-rotate"></use>
+                            </svg>
+                        </span>
+                        <p class="case-cart__sub-title"><?php the_sub_field('casecart_sub_title'); ?></p>
+                        <h4 class="case-cart__title"><?php the_sub_field('casecart_title'); ?></h4>
+                    </a>
+                        <?php endwhile; ?>
+                    <?php endif; ?>
+                </div>
+
+                <?php endwhile; ?>
+            <?php endif; ?>
         </div>
     </div>
+    <?php endif; ?>
+
     <div class="contact">
         <div class="contact__wrapper layout">
             <div class="contact__content">
