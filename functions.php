@@ -18,6 +18,18 @@ function menu_names($name) {
     return $menu_obj->name;
 }
 
+if( function_exists('acf_add_options_page') ) {
+
+    acf_add_options_page(array(
+        'page_title' 	=> 'Основные настройки',
+        'menu_title'	=> 'Настройки темы',
+        'menu_slug' 	=> 'theme-general-settings',
+        'capability'	=> 'edit_posts',
+        'redirect'		=> false
+    ));
+
+}
+
 function style_theme() {
     wp_enqueue_style('style', get_stylesheet_uri());
     wp_enqueue_style('main', get_template_directory_uri() . '/css/main.css');

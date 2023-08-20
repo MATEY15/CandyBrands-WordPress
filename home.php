@@ -399,28 +399,44 @@ Template Name: Home Page
     </div>
     <?php endif; ?>
 
+    <?php if( get_field('contact_if_show') ): ?>
     <div class="contact">
         <div class="contact__wrapper layout">
             <div class="contact__content">
-                <div class="contact__heading"><h3 class="h2-style"><img class="icon-heading"
-                                                                        src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt=""> Контакты
-                    </h3></div>
-                <p> Воспользуйтесь формой обратной связи на экране справа, если хотите </p>
-                <ul>
-                    <li>задать вопрос</li>
-                    <li>оставить отзыв о нашей работе и продукции</li>
-                    <li>направить предложение.</li>
-                </ul>
-                <p> Или свяжитесь с нами любым удобным вам способом: </p>
+                <div class="contact__heading">
+                    <h3 class="h2-style">
+                        <img class="icon-heading" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt="">
+                        <?php echo get_field('contact_title'); ?>
+                    </h3>
+                </div>
+                <?php echo get_field('contact_desc'); ?>
                 <div class="contact__main">
-                    <div class="contact__main-item"><h5>Почта</h5> <a href="mailto:">feedback@candybrands.ru</a></div>
-                    <div class="contact__main-item"><h5>Телефон</h5> <a href="tel:+7 (499) 302-17-73">+7 (499)
-                            302-17-73</a></div>
-                    <div class="contact__main-item"><h5>Адрес</h5>
-                        <p> г. Москва, ул. Бутлерова 17 <br> м. Калужская, БЦ "Neo Geo" </p></div>
-                    <div class="contact__main-item"><h5>Реквизиты</h5>
-                        <p> Ознакомиться с реквизитами компании <br> можно, нажав на кнопку <br> ниже: </p></div>
-                    <a href="#" class="button button--medium button--white">Скачать реквизиты</a></div>
+
+                    <?php  if( have_rows('contact_repeat') ): ?>
+                        <?php while ( have_rows('contact_repeat') ) : the_row(); ?>
+                        <?php
+                            $select = get_sub_field('contact_data_tel');
+                        ?>
+                    <div class="contact__main-item">
+                        <h5><?php the_sub_field('contact_data_title'); ?></h5>
+                        <?php  if( $select === 'tel' ): ?>
+                            <a href="tel:<?php the_sub_field('contact_data_desc'); ?>"><?php the_sub_field('contact_data_desc'); ?></a>
+                        <?php elseif($select === 'email'): ?>
+                            <a href="mailto:<?php the_sub_field('contact_data_desc'); ?>"><?php the_sub_field('contact_data_desc'); ?></a>
+                        <?php else: ?>
+                            <p><?php the_sub_field('contact_data_desc'); ?></p>
+                        <?php endif; ?>
+                    </div>
+                        <?php endwhile; ?>
+                    <?php endif; ?>
+
+                    <?php
+                        $button_text = get_field('contact_load');
+                        if( !$button_text == "" ):
+                    ?>
+                        <a href="<?php echo get_field('contact_load_link'); ?>" class="button button--medium button--white"><?php echo get_field('contact_load'); ?></a>
+                    <?php endif; ?>
+                </div>
             </div>
             <div class="contact__call">
                 <div class="contact__call-heading"><h4 class="h4-style">Свяжитесь со мной</h4>
@@ -450,6 +466,7 @@ Template Name: Home Page
             </div>
         </div>
     </div>
+    <?php endif; ?>
 </main>
 
 <?php get_footer(); ?>

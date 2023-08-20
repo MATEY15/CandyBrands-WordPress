@@ -45,11 +45,19 @@
                     <use xlink:href="<?php bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-search"></use>
                 </svg>
             </div>
-            <div class="download-katalog"><a href="#" class="download-katalog__link">
+            <?php
+                $load_link = get_field('load_catalog', 'options' );
+                if( $load_link !== "" ):
+            ?>
+            <div class="download-katalog">
+                <a href="<?php echo get_field('load_catalog_link', 'options' ); ?>" class="download-katalog__link">
                     <svg class="icon-download" width="18px" height="18px">
                         <use xlink:href="<?php bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-download"></use>
                     </svg>
-                    Каталог PDF </a></div>
+                    <?php echo get_field('load_catalog', 'options' ); ?>
+                </a>
+            </div>
+            <?php endif; ?>
         </div>
         <div class="header__burger"><span class="header__burger--open"> <svg width="20" height="16" viewBox="0 0 20 16"
                                                                              fill="none"

@@ -2,8 +2,11 @@
     <div class="layout">
         <div class="footer__head"><a href="<?php home_url(); ?>"><img src="<?php bloginfo('stylesheet_directory'); ?>/img/logo-footer.svg" alt="Logo"></a></div>
         <div class="footer__body">
-            <div class="footer__description"><p> Текст с политикой конфиденциальности. Мы любим свое дело и ежедневно
-                    делимся своей любовью. </p></div>
+            <div class="footer__description">
+                <p>
+                    <?php echo get_field('footer_politics', 'options' ); ?>
+                </p>
+            </div>
             <div class="footer__menu">
                 <div class="footer__menu-item">
                     <h4><?php echo menu_names('footer1'); ?></h4>
@@ -23,14 +26,15 @@
                         'theme_location'  => 'footer3',
                     ] ); ?>
                 </div>
-                <div class="footer__menu-item"><h4>ООО «Кэндифлоу»</h4>
-                    <ul>
-                        <li>ИНН 5034062413</li>
-                        <li>КПП 503401001</li>
-                        <li>ОГРН 1225000071020</li>
-                    </ul>
+                <?php
+                    $info_company = get_field('info_company', 'options' );
+                    if( $info_company !== "" ):
+                ?>
+                <div class="footer__menu-item">
+                    <?php echo get_field('info_company', 'options' ); ?>
                 </div>
             </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
