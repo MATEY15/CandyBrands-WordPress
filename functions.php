@@ -231,9 +231,6 @@ function register_post_types(){
 //});
 require_once get_stylesheet_directory() . '/utilities/category-filter/category-filter.php';
 
-//add_action( 'events_add_filter_sidebar', 'add_filter_archive_event' );
-
-
 add_action( 'events_add_filter_sidebar', 'add_filter_archive_event' );
 function add_filter_archive_event() {
 //    global $wp;
