@@ -5,3 +5,11 @@ Theme Name: CandyBrands
 html {
     margin-top: 0 !important;
 }
+
+
+.breadcrumbs span {
+    color: #05020c;
+    display: inline-block;
+    font-size: 16px;
+    line-height: 150%;
+}
