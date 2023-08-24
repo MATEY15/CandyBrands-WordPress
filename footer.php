@@ -40,5 +40,37 @@
 </div>
 <div class="overlay"></div>
 <?php wp_footer(); ?>
+<script>
+    jQuery( function( $ ){
+        let eventRequest = null;
+        let url;
+        $(document.body).on('click', '.go-ajax a', function (e) {
+            e.preventDefault();
+            url = $(this).attr('href');
+            $('.catalog__wrapper').addClass('AJAX');
+            $(document.body).trigger('event_filter_ajax_request', url)
+        });
+        $(document.body).on('event_filter_ajax_request', function (e, url, el) {
+            console.log(url);
+            let content = $('.catalog__wrapper');
+            if(url.slice(-1) === '?') {
+                url = url.slice(0, -1);
+            }
+            url = url.replace(/%2C/, ',');
+            if(eventRequest) {
+                eventRequest.abort();
+            }
+            $.get(url, function (res) {
+                content.replaceWith($(res).find('.catalog__wrapper'));
+                $('.catalog__wrapper').removeClass('AJAX');
+            }, 'html');
+        });
+    });
+    // jQuery( function( $ ){
+    //     $( '.product__button .button' ).click( function(){
+    //         alert( 'Если это работает, уже неплохо' );
+    //     });
+    // });
+</script>
 </body>
 </html>

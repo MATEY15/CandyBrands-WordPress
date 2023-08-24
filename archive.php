@@ -29,81 +29,74 @@
             </div>
             <div class="product">
 
+                <?php
+
+                global $wp_query;
+                $args = array_merge( $wp_query->query, array( 'post_type' => 'catalog' ) );
+                query_posts( $args );
+                vardump($args);
+
+                $get_category = preg_split('/[,|:]/u', $args['catalog_category'], -1, PREG_SPLIT_NO_EMPTY);
+                $path_category = [];
+                $get_category = array_reverse($get_category);
+
+                // vardump($path_category);
+
+                foreach ($get_category as $item) :
+                ?>
 
                 <div class="product__category">
 
                     <div class="product__heading">
                         <h3 class="h4-style">
                             <img class="icon-heading" src="<?php bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt="">
-                            Name - 123
+                            <?php
+                                $term = get_term_by('slug', $item, 'catalog_category');
+                                echo $term->name;
+                            ?>
                         </h3>
                     </div>
                     <div class="product__wrapper">
 
                         <?php
-                        global $wp_query;
-                        $args = array_merge( $wp_query->query, array( 'post_type' => 'catalog' ) );
-                        query_posts( $args );
+
+                            $query = new WP_Query( [ 'catalog_category' => $item ] );
+                            $totalpost = $query->found_posts;
+
+                            while ( $query->have_posts() ) {$query->the_post();
+
+                        ?>
+
+                            <div class="product__item">
+                                <div class="product__top">
+                                    <span class="product__label">Новинка</span>
+                                    <a href="<?php the_permalink(); ?>" class="product__image">
+                                        <img src="<?php bloginfo('stylesheet_directory'); ?>/img/product/product-1.png" alt="<?php the_title(); ?>">
+                                    </a>
+                                </div>
+                                <div class="product__bottom">
+                                    <div class="product__article">Арт. 00001</div>
+                                    <a href="<?php the_permalink(); ?>" class="product__name"><?php the_title(); ?></a>
+                                </div>
+                            </div>
+
+                        <?php }
+                            wp_reset_postdata();
+                        ?>
 
 
-                        $get_category = preg_split('/[,|:]/u', $args['catalog_category'], -1, PREG_SPLIT_NO_EMPTY);
-                        $path_category = null;
-                        vardump(count($get_category));
-
-                        foreach ($get_category as $item) :
-                            if($get_category > 0) {}
-//                            $path_category =
-                            vardump($item);
-                        endforeach;
-
-
-                        $args = array(
-                            'cat' => $get_category[0], $get_category[1],
-                            'post_type' => 'catalog',
-                            'posts_per_page' => -1
-                        ); ?>
-<!--                        --><?php //query_posts($args); ?>
-                        <div class="news_anons">
-                            <?php while (have_posts()) : the_post(); ?>
-                                <article class="news_anons__item">
-                                    <div class="image">
-                                    </div>
-                                    <div class="news_anons__info">
-                                        <div class="title"><a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>"><?php the_title(); ?></a></div>
-                                        <br><br>
-                                    </div>
-                                </article>
-                            <?php endwhile; ?>
-                        </div>
-                        <?php wp_reset_query(); ?>
-
-<!--                        if ( have_posts() ) { while ( have_posts() ) { the_post(); ?>-->
-<!---->
-<!--                            <div class="product__item">-->
-<!--                                <div class="product__top">-->
-<!--                                    <span class="product__label">Новинка</span>-->
-<!--                                    <a href="--><?php //the_permalink(); ?><!--" class="product__image">-->
-<!--                                        <img src="--><?php //bloginfo('stylesheet_directory'); ?><!--/img/product/product-1.png" alt="--><?php //the_title(); ?><!--">-->
-<!--                                    </a>-->
-<!--                                </div>-->
-<!--                                <div class="product__bottom">-->
-<!--                                    <div class="product__article">Арт. 00001</div>-->
-<!--                                    <a href="--><?php //the_permalink(); ?><!--" class="product__name">--><?php //the_title(); ?><!--</a>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!---->
-<!--                        --><?php //} } else { ?>
-<!--                            <p>Записей нет.</p>-->
-<!--                        --><?php //} ?>
                     </div>
 
-                    <div class="product__button"><a href="#" class="button button--medium button--yellow">Показать
-                            еще</a></div>
-                    <hr>
+                <?php if($totalpost > 5) { ?>
+                    <div class="product__button">
+                        <a href="#" class="button button--medium button--yellow">Показать еще</a>
+                    </div>
+                <?php } ?>
+
                 </div>
+                <?php endforeach; ?>
 
-
-                <div class="product__category">
+                <div class="product__category" style="display:none;">
                     <div class="product__heading"><h3 class="h4-style"><img class="icon-heading"
                                                                             src="<?php bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt=""> Crazy
                             Zombie </h3></div>

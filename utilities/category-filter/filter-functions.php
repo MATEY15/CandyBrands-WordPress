@@ -100,7 +100,7 @@ function get_filter_by_taxonomy_links($taxonomy = '', $title = '', $class = '', 
 
     <div style="display: block;">
         <h3><?php $title; ?></h3>
-        <ul>
+        <ul class="go-ajax">
         <?php foreach ($terms as $term) : ?>
             <?php
             $link = $fn();
