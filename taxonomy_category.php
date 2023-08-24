@@ -3,9 +3,7 @@
 <main>
     <?php if ( function_exists( 'dimox_breadcrumbs' ) ) dimox_breadcrumbs(); ?>
     <div class="catalog">
-        <div class="layout catalog__heading">
-            <h2 class="h2-style">Каталог товаров</h2>
-        </div>
+        <div class="layout catalog__heading"><h2 class="h2-style">**Каталог товаров</h2></div>
         <div class="catalog__wrapper layout">
             <div class="catalog__filter-wrapper"><a href="" class="catalog__filter"> <img src="<?php bloginfo('stylesheet_directory'); ?>/img/icons/filter.svg"
                                                                                           alt="filter icon"> <span>Открыть фильтр</span>
@@ -176,7 +174,7 @@
                     </div>
                     <div class="product__button"><a href="#" class="button button--medium button--yellow">Показать
                             еще</a></div>
-                    <hr>
+                        <hr>
                 </div>
                 <div class="product__category">
                     <div class="product__heading"><h3 class="h4-style"><img class="icon-heading"

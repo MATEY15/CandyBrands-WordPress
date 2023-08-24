@@ -10,7 +10,7 @@
 <main>
     <?php if ( function_exists( 'dimox_breadcrumbs' ) ) dimox_breadcrumbs(); ?>
     <div class="catalog">
-        <div class="layout catalog__heading"><h2 class="h2-style">Каталог товаров</h2></div>
+        <div class="layout catalog__heading"><h2 class="h2-style">Index Каталог товаров</h2></div>
         <div class="catalog__wrapper layout">
             <div class="catalog__filter-wrapper"><a href="" class="catalog__filter"> <img src="/img/icons/filter.svg"
                                                                                           alt="filter icon"> <span>Открыть фильтр</span>
@@ -18,6 +18,7 @@
             <div class="filter filter__scroll">
                 <div class="filter__wrapper">
                     <div class="filter__item">
+                        <?php do_action('events_add_filter_sidebar') ?>
                         <div class="filter__head"> Бренд <span class="icon-rotate"> <svg class="icon-arrow-rotate"
                                                                                          width="39px" height="39px"> <use
                                             xlink:href="/img/icons/sprites.svg#icon-arrow-rotate"></use> </svg> </span></div>
