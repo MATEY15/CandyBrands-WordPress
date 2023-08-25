@@ -102,7 +102,7 @@
                             <input class="search__form-input" type="text" placeholder="Поиск...">
                             <button class="search__form-button">
                                 <svg class="icon-search" width="16px" height="16px">
-                                    <use xlink:href="/img/icons/sprites.svg#icon-search"></use>
+                                    <use xlink:href="<?php bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-search"></use>
                                 </svg>
                             </button>
                         </div>
@@ -110,7 +110,7 @@
                 </div>
                 <div class="download-katalog"><a href="#" class="download-katalog__link">
                         <svg class="icon-download" width="18px" height="18px">
-                            <use xlink:href="/img/icons/sprites.svg#icon-download"></use>
+                            <use xlink:href="<?php bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-download"></use>
                         </svg>
                         Каталог PDF </a></div>
             </div>

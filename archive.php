@@ -30,6 +30,23 @@
             <div class="product">
 
                 <?php
+                // Получить все названия дочерних категорий
+
+                $getAllCategory = get_terms([
+                    'taxonomy'   => 'catalog_category',
+                    'hide_empty' => false,
+                    'childless' => true,
+                ]);
+                $getCategory = [];
+                foreach ($getAllCategory as $cat) :
+//                    vardump($cat);
+                    if($cat->count > 0) {
+                        $getCategory[] = $cat->slug;
+                    }
+                endforeach;
+                ?>
+
+                <?php
 
                 global $wp_query;
                 $args = array_merge( $wp_query->query, array( 'post_type' => 'catalog' ) );
@@ -40,9 +57,22 @@
                 $path_category = [];
                 $get_category = array_reverse($get_category);
 
-                // vardump($path_category);
+//                 vardump($getCategory);
+                 if(!sizeof($get_category)) {
+                     $get_category = $getCategory;
+                 }
+                 vardump($get_category);
 
                 foreach ($get_category as $item) :
+
+                    // WP_Query
+                    $query = new WP_Query( [ 'catalog_category' => $item ] );
+                    $totalpost = $query->found_posts;
+//                    vardump($totalpost);
+
+                    // if...
+                    if($totalpost > 0) {
+                        echo $totalpost;
                 ?>
 
                 <div class="product__category">
@@ -60,8 +90,7 @@
 
                         <?php
 
-                            $query = new WP_Query( [ 'catalog_category' => $item ] );
-                            $totalpost = $query->found_posts;
+
 
                             while ( $query->have_posts() ) {$query->the_post();
 
@@ -94,7 +123,7 @@
                 <?php } ?>
 
                 </div>
-                <?php endforeach; ?>
+                <?php } endforeach; ?>
 
                 <div class="product__category" style="display:none;">
                     <div class="product__heading"><h3 class="h4-style"><img class="icon-heading"
