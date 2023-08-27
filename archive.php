@@ -30,6 +30,57 @@
             <div class="product">
 
                 <?php
+//                global $wp_query;
+//                $tax_query = isset($wp_query->query_vars['tax_query']) ? $wp_query->query_vars['tax_query'] : array();
+//
+//                $tax_query = new WP_Tax_Query($tax_query);
+//
+//                vardump($tax_query);
+
+                // 1
+                // При выборе фильтра “бренд” и “тип”  заголовок остается с брендом.
+                // Пользователь видит отображение продуктов выбранной категории и бренда.
+
+                // 2
+                // При выборе фильтра “бренд” (фильтр “тип” не выбран), заголовок
+                //c брендом заменяется на заголовок с типом товара (Жевательные конфеты ) (т.к. бренд определён пользователем).
+                //Далее идут блоки с категориями, которые есть у бренда. Если у бренда нет какой то из ,перечисленных в фильтрах, категории - она не отображается среди товаров
+
+                // 3
+                // При выборе фильтра “тип” (фильтр “бренд” не выбран), заголовок c брендом.
+                //Пользователь видит бренды (заголовок), а в блоке с продуктами видит продукты соответствующие выбранному типу (категории)
+
+                // 4
+                // При выборе фильтра “новинки” или “скоро в продаже” Пользователь видит только новинки или товары из категории “скоро в продаже”.
+                //Отображаются категории, которые имеют новинки или раздел “скоро в продаже”
+
+
+                // Category for filters
+
+                $catalog = 'catalog';
+                $taxonomy = 'catalog_category';
+//
+//                $getParentCategory = get_terms([
+//                    'taxonomy' => $taxonomy,
+//                    'hide_empty' => false,
+//                    'parent' => 0,
+//                ]);
+////                vardump($getParentCategory);
+//
+//                $getChildCategory = get_terms([
+//                    'taxonomy' => $taxonomy,
+//                    'hide_empty' => false,
+//                    'childless' => true,
+//                ]);
+//
+//                foreach ($getChildCategory as $cat) :
+//                    if($cat->count > 0) {
+//                        $getCategory[] = $cat->slug;
+//                    }
+//                endforeach;
+
+
+
                 // Получить все названия дочерних категорий
 
                 $getAllCategory = get_terms([
@@ -47,11 +98,103 @@
                 ?>
 
                 <?php
+                    // Получить все родительские категории NEW*
+
+                $brand = 'brand';
+
+
+                $parentCategory = get_terms([
+                    'taxonomy'   => $taxonomy,
+                    'hide_empty' => false,
+                    'parent' => 0,
+                ]);
+
+                $getChildCategory = [];
+                foreach ($parentCategory as $childCat) :
+//                    vardump($childCat);
+                    $children = get_term_children( $childCat->term_taxonomy_id, $taxonomy );
+                    $getChildCategory[] = [
+                        'category_name' => $childCat->name,
+                        'category_slug' => $childCat->slug,
+                        'category_id' => $childCat->term_id,
+                        'children_category' => $children
+                    ];
+                endforeach;
+
+//                vardump($getChildCategory);
+                $childrenCategory = [];
+                foreach ($getChildCategory as $child) :
+                    $childrenCategory[] = [
+                        'category_name' => $child['category_name'],
+                        'category_slug' => $child['category_slug'],
+                        'children_category' => $child['children_category'],
+                    ];
+                endforeach;
+
+//                vardump($childrenCategory);
+
+                $brandCategory = [];
+                foreach ($childrenCategory as $child) :
+
+                    if($child['category_slug'] === $brand) {
+                        foreach ($child['children_category'] as $item) :
+                            $category = get_term( $item );
+                            $brandCategory[] = $category;
+                        endforeach;
+                    }
+
+                endforeach;
+
+                $getPosts = [];
+                foreach ($brandCategory as $item) :
+//                    vardump($item);
+
+                    $args = array(
+                        'post_type' => 'catalog',
+                        'tax_query' => array(
+                            array(
+                                'taxonomy' => $taxonomy,
+                                'field'    => 'term_id',
+                                'terms'    => $item->term_id,
+                            ),
+                        ),
+                    );
+                    $query = new WP_Query($args);
+
+                    if ( $query->have_posts() ): ?>
+
+                        <h2><?php echo $item->name ; ?></h2>
+
+                        <?php while($query -> have_posts()) : $query -> the_post(); ?>
+                            <p><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></p>
+
+                        <?php
+                        endwhile;
+                    endif;
+
+                endforeach;
+
+                function get_category_slug($slug) {
+                    $category = get_term_by( 'slug', $slug, 'catalog_category' );
+                    if ( $category ) {
+                        _make_cat_compat( $category );
+                    }
+                    return $category;
+                }
+                vardump(get_category_slug('zhevatelnaya-konfeta'));
+
+
+
+                ?>
+
+
+
+                <?php
 
                 global $wp_query;
                 $args = array_merge( $wp_query->query, array( 'post_type' => 'catalog' ) );
                 query_posts( $args );
-                vardump($args);
+//                vardump($args);
 
                 $get_category = preg_split('/[,|:]/u', $args['catalog_category'], -1, PREG_SPLIT_NO_EMPTY);
                 $path_category = [];
@@ -61,14 +204,16 @@
                  if(!sizeof($get_category)) {
                      $get_category = $getCategory;
                  }
-                 vardump($get_category);
+//                 vardump($get_category);
 
                 foreach ($get_category as $item) :
 
                     // WP_Query
                     $query = new WP_Query( [ 'catalog_category' => $item ] );
                     $totalpost = $query->found_posts;
-//                    vardump($totalpost);
+//                    vardump($query);
+                    echo '<br>';
+                    echo '//////////////////////////////////';
 
                     // if...
                     if($totalpost > 0) {
