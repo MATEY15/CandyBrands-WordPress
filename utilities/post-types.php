@@ -82,6 +82,44 @@ function candy_register_post_types() {
         //'update_count_callback' => '_update_post_term_count',
     ] );
 
+    register_taxonomy( 'catalog_type', [ 'catalog' ], [
+        'label'                 => '', // определяется параметром $labels->name
+        'labels'                => [
+            'name'              => 'Тип',
+            'singular_name'     => 'Тип',
+            'search_items'      => 'Найти типы',
+            'all_items'         => 'Все Категории',
+            'view_item '        => 'Смотреть тип',
+            'parent_item'       => 'Родительсякий тип',
+            'parent_item_colon' => 'Родительсякий тип:',
+            'edit_item'         => 'Редактировать тип',
+            'update_item'       => 'Обновить тип',
+            'add_new_item'      => 'Добавить новый тип',
+            'new_item_name'     => 'Имя типа',
+            'menu_name'         => 'Тип',
+            'back_to_items'     => '← Вернуться в тип',
+        ],
+        'description'           => '', // описание таксономии
+        'public'                => true,
+        // 'publicly_queryable'    => null, // равен аргументу public
+        // 'show_in_nav_menus'     => true, // равен аргументу public
+        // 'show_ui'               => true, // равен аргументу public
+        // 'show_in_menu'          => true, // равен аргументу show_ui
+        // 'show_tagcloud'         => true, // равен аргументу show_ui
+        // 'show_in_quick_edit'    => null, // равен аргументу show_ui
+        'hierarchical'          => true,
+
+        'rewrite'               => true,
+        //'query_var'             => $taxonomy, // название параметра запроса
+        'capabilities'          => array(),
+        'meta_box_cb'           => null, // html метабокса. callback: `post_categories_meta_box` или `post_tags_meta_box`. false — метабокс отключен.
+        'show_admin_column'     => false, // авто-создание колонки таксы в таблице ассоциированного типа записи. (с версии 3.5)
+        'show_in_rest'          => true, // добавить в REST API
+        'rest_base'             => null, // $taxonomy
+        // '_builtin'              => false,
+        //'update_count_callback' => '_update_post_term_count',
+    ] );
+
     register_taxonomy('events_tags', ['catalog'], [
         'labels' => [
             'name'              => _x('Теги', 'Теги события админка', 'oceanwp'),

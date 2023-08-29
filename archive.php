@@ -1,4 +1,8 @@
-<?php get_header(); ?>
+<?php
+    get_header();
+
+    $view = 'Работает';
+?>
 
 <main>
     <?php if ( function_exists( 'dimox_breadcrumbs' ) ) dimox_breadcrumbs(); ?>
@@ -15,7 +19,10 @@
             </div>
             <div class="filter filter__scroll">
                 <div class="filter__wrapper">
-                    <?php do_action('events_add_filter_sidebar') ?>
+                    <?php
+                    do_action('events_add_filter_sidebar');
+                    getPostsBrands();
+                    ?>
 
                     <div class="filter__item">
                         <div class="filter__button">
@@ -28,6 +35,263 @@
                 </div>
             </div>
             <div class="product">
+                <?php
+
+                // 1 get Brands
+
+//                vardump(getCategorySlugUrl());
+//                vardump(get_the_category());
+
+
+                if(!getCategorySlugUrl()) {
+                    getPostsBrand(getPostsBrands());
+                } else {
+//                    vardump(getCategorySlugUrl());
+                    vardump('2');
+                }
+                    function getPostsBrandType($postsBrand, $postType) {
+                        $args = array(
+                            'post_type' => CATALOG_TYPE,
+                            'tax_query' => [
+                                'relation' => 'AND',
+                                [
+                                    'taxonomy' => CATALOG_TAXONOMY,
+                                    'field'    => 'slug',
+                                    'terms'    => $postsBrand,
+                                ],
+                                [
+                                    'taxonomy' => TAXONOMY_TYPE,
+                                    'field'    => 'slug',
+                                    'terms'    => $postType,
+                                ],
+                            ],
+                        );
+
+//                        vardump($args['post_type']);
+//                        vardump($args['tax_query']);
+
+//                        $query = new WP_Query( $args );
+//                        while ($query->have_posts()) {
+//                            $query->the_post();
+//                            vardump(the_title());
+//                        }
+
+//                        vardump(get_category_slug($item)->name);
+
+                    }
+                    getPostsBrandType(['crazy-zombie1'], ['zhevatelnaya-konfeta', 'zhevatelnaya-rezinka']);
+
+
+
+
+//                vardump($brands['name']);
+
+                $selectTaxonomy = [
+                    'brands' => ['crazy-zombie1'],
+                    'types' => ['zhevatelnaya-konfeta']
+                ];
+
+                foreach ($selectTaxonomy as $key => $value) {
+//                    vardump($key . ": " . $value);
+
+                    if($key === 'brands') {
+//                        vardump('1');
+                    } else {
+//                        vardump('false');
+                    }
+
+                }
+
+
+                $allTaxonomy = [
+                    [
+                        'name' => 'brand' ,
+                        'slug' => [
+                            'crazy-zombie1',
+                            'Кислица1',
+                            'my-printsessa1',
+                        ]
+                    ],
+                    [
+                        'name' => 'types' ,
+                        'slug' => [
+                            'zhevatelnaya-konfeta',
+                            'zhevatelnaya-rezinka',
+                            'caramel'
+                        ]
+                    ]
+                ];
+
+                $postTaxonomy = [
+                    'crazy-zombie1',
+                    'zhevatelnaya-konfeta',
+                    'zhevatelnaya-rezinka' // ???????????????????????
+                ];
+
+                $resultAttachmentTaxonomy = [];
+                function attachmentTaxonomy($array, $taxonomy) {
+                    foreach ($array as $item) {
+                        foreach ($taxonomy as $value) {
+                            if($item['name'] === 'brand') {
+                                $resultAttachmentTaxonomy[] = [$value];
+                            }
+                            if($item['name'] === 'types') {
+                                $resultAttachmentTaxonomy[] = [$value];
+                            }
+                        }
+                    }
+                    vardump($resultAttachmentTaxonomy);
+                }
+                attachmentTaxonomy($allTaxonomy, $postTaxonomy);
+
+                $queryArgs = [];
+                foreach ($allTaxonomy as $item) {
+                    if($item['name'] === 'brand') {
+                        $queryArgs[] = queryArgsFn($postTaxonomy, $item['slug'], CATALOG_TAXONOMY);
+                    }
+                    if($item['name'] === 'types') {
+                        $queryArgs[] = queryArgsFn($postTaxonomy, $item['slug'], TAXONOMY_TYPE);
+                    }
+                }
+//                    vardump($queryArgs);
+
+                function queryArgsFn($taxonomy, $array, $customTaxonomy) {
+                    foreach ($array as $item) {
+                        foreach ($taxonomy as $value) {
+//                            vardump($value);
+                            if($item === $value) {
+//                                return [
+//                                    'taxonomy' => $customTaxonomy,
+//                                    'term' => [$value]
+//                                ];
+                            }
+                        }
+                    }
+                }
+//                vardump($queryArgs);
+
+
+                $resultCheckTaxonomy = [];
+                function checkTaxonomy($getPost, $tax) {
+                    foreach ($tax[0] as $value) {
+                        foreach ($getPost as $post) {
+                            if($value === $post) {
+                                $resultCheckTaxonomy[] = $post;
+                            }
+                        }
+                    }
+                    vardump($resultCheckTaxonomy);
+                }
+//                    checkTaxonomy($checkTaxonomy, $brands);
+
+
+//                $resultCheck = [];
+//                foreach ($allTaxonomy as $item) {
+//                    foreach ($checkTaxonomy as $check) {
+//                        if($item === $check) {
+//                            $resultCheck[] = $check;
+//                        }
+//                    }
+//                }
+//                vardump($resultCheck);
+
+                $requirements = array(
+                    array(
+                        'taxonomy' => CATALOG_TAXONOMY,
+                        'term' => ['crazy-zombie1']
+                    ),
+                    array(
+                        'taxonomy' => TAXONOMY_TYPE,
+                        'term' => ['zhevatelnaya-konfeta']
+                    ),
+
+                );
+
+                function fruit_query_mult_tax($array){
+                    wp_reset_query();
+                    $query = array('post_type' => CATALOG_TYPE,
+                        'tax_query' => array()
+                    );
+
+                    $query['tax_query'] = array(
+                        'relation' => 'AND',
+                    );
+                    foreach($array as $param){
+                        $query['tax_query'][]=  array(
+                            'taxonomy' => $param["taxonomy"],
+                            'terms' => $param["term"],
+                            'field' => 'slug',
+                        );
+                    }
+
+                    $result = new WP_Query($query);
+                    return $result;
+
+                }
+                $result = fruit_query_mult_tax($queryArgs);
+
+                while ($result->have_posts()) {
+                    $result->the_post();
+                    vardump(the_title());
+                }
+
+
+
+
+//                vardump($args);
+
+
+//                $args = array(
+//                    'post_type' => CATALOG_TYPE,
+//                    'tax_query' => [
+//                        'relation' => 'AND',
+//                        [
+//                            'taxonomy' => CATALOG_TAXONOMY,
+//                            'field'    => 'slug',
+//                            'terms'    => getCategorySlugUrl(),
+////                            'operator' => 'OR'
+//                        ],
+//                        [
+//                            'taxonomy' => CATALOG_TAXONOMY,
+//                            'field'    => 'slug',
+//                            'terms'    => array('novinki'),
+////                            'operator' => 'AND'
+//                        ],
+//                        [
+//                            'taxonomy' => CATALOG_TAXONOMY,
+//                            'field'    => 'slug',
+//                            'terms'    => array('zhevatelnaya-konfeta'),
+////                            'operator' => 'AND'
+//                        ],
+//
+//                    ],
+//                );
+
+
+//                    vardump(get_category_slug("kislitsa")->name);
+//                $query = new WP_Query( $args );
+//                while ($query->have_posts()) {
+//                    $query->the_post();
+//                    vardump(the_title());
+//                }
+
+//                vardump(getPostsBrands());
+
+//                $ggg = getBrandPosts('kislitsa');
+//                vardump($ggg);
+                echo '<br><br><br><br><br><br>';
+//                getBrandPosts();
+//                $getAllPostsBrand = getPostsBrands();
+//                foreach ($getAllPostsBrand as $item) {
+//                    vardump($item);
+//                    vardump(getBrandPosts($item));
+//                }
+
+
+                    echo '-------------------------------------- END ------------------------------------';
+
+                    ?>
+
 
                 <?php
 //                global $wp_query;
@@ -57,8 +321,8 @@
 
                 // Category for filters
 
-                $catalog = 'catalog';
-                $taxonomy = 'catalog_category';
+//                $catalog = 'catalog';
+//                $taxonomy = 'catalog_category';
 //
 //                $getParentCategory = get_terms([
 //                    'taxonomy' => $taxonomy,
@@ -98,7 +362,11 @@
                 ?>
 
                 <?php
-                    // Получить все родительские категории NEW*
+
+                $catalog = 'catalog';
+                $taxonomy = 'catalog_category';
+
+                // Получить все родительские категории NEW*
 
                 $brand = 'brand';
 
@@ -145,7 +413,7 @@
 
                 endforeach;
 
-                $getPosts = [];
+
                 foreach ($brandCategory as $item) :
 //                    vardump($item);
 
@@ -159,14 +427,15 @@
                             ),
                         ),
                     );
+
                     $query = new WP_Query($args);
 
                     if ( $query->have_posts() ): ?>
 
-                        <h2><?php echo $item->name ; ?></h2>
+<!--                        <h2>--><?php //echo $item->name ; ?><!--</h2>-->
 
                         <?php while($query -> have_posts()) : $query -> the_post(); ?>
-                            <p><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></p>
+<!--                            <p><a href="--><?php //the_permalink(); ?><!--">--><?php //the_title(); ?><!--</a></p>-->
 
                         <?php
                         endwhile;
@@ -174,14 +443,6 @@
 
                 endforeach;
 
-                function get_category_slug($slug) {
-                    $category = get_term_by( 'slug', $slug, 'catalog_category' );
-                    if ( $category ) {
-                        _make_cat_compat( $category );
-                    }
-                    return $category;
-                }
-                vardump(get_category_slug('zhevatelnaya-konfeta'));
 
 
 
@@ -199,6 +460,8 @@
                 $get_category = preg_split('/[,|:]/u', $args['catalog_category'], -1, PREG_SPLIT_NO_EMPTY);
                 $path_category = [];
                 $get_category = array_reverse($get_category);
+
+                vardump($get_category);
 
 //                 vardump($getCategory);
                  if(!sizeof($get_category)) {

@@ -128,6 +128,7 @@ require_once get_stylesheet_directory() . '/utilities/breadcrumbs.php';
 require_once get_stylesheet_directory() . '/utilities/post-types.php';
 require_once get_stylesheet_directory() . '/utilities/category-filter/category-filter.php';
 require_once get_stylesheet_directory() . '/utilities/category-filter/filter-functions.php';
+require_once get_stylesheet_directory() . '/utilities/category-filter/filter-posts.php';
 
 
 // хук для регистрации
