@@ -7,6 +7,29 @@
     CONST BRAND_SLUG = 'brand';
     CONST TAXONOMY_BRANDS = 'brands';
 
+    CONST TAXONOMYES = [
+        CATALOG_TAXONOMY,
+        TAXONOMY_TYPE,
+        TAXONOMY_NEWS
+    ];
+
+    function getTerms($array) {
+        $terms = [];
+        foreach ($array as $item) {
+            $terms[] = [
+                'name' => get_taxonomy($item)->label,
+                'slug' => get_taxonomy($item)->name,
+                'terms' => get_terms([
+                    'taxonomy' => $item,
+                    'hide_empty' => false,
+                    'childless' => true,
+                ])
+            ];
+        }
+        return $terms;
+    }
+
+
     function getPostsBrands(): array {
         $brand = getBrandTerm();
         $brands = get_terms(
@@ -107,7 +130,7 @@
                     ],
                 ],
             );
-            vardump(get_category_slug($item)->name);
+//            vardump(get_category_slug($item)->name);
             $query = new WP_Query( $args );
             while ($query->have_posts()) {
                 $query->the_post();
@@ -115,8 +138,5 @@
             }
         }
     }
-
-
-
 
 ?>

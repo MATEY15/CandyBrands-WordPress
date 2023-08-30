@@ -1,7 +1,5 @@
 <?php
     get_header();
-
-    $view = 'Работает';
 ?>
 
 <main>
@@ -20,8 +18,7 @@
             <div class="filter filter__scroll">
                 <div class="filter__wrapper">
                     <?php
-                    do_action('events_add_filter_sidebar');
-                    getPostsBrands();
+                        do_action('events_add_filter_sidebar');
                     ?>
 
                     <div class="filter__item">
@@ -37,17 +34,214 @@
             <div class="product">
                 <?php
 
-                // 1 get Brands
+                function getRequest() {
+                    $result = [];
+                    foreach (TAXONOMYES as $taxonomyUrl) {
+//                        vardump($_GET[$taxonomyUrl]);
+                        $result[] = [
+                            'name' => $taxonomyUrl,
+                            'slug' => explode(",", $_GET[$taxonomyUrl])
+                        ];
+                    }
+                    return $result;
+                };
+                $getRequest = getRequest();
 
-//                vardump(getCategorySlugUrl());
-//                vardump(get_the_category());
+//                vardump($getRequest);
+                $createRequirements = [];
+//                vardump($getRequest);
+                $getTerms = getTerms(TAXONOMYES);
+//                vardump($getTerms);
+
+                function termsSort($terms, $taxonomy) {
+//                    foreach ($getTerms as $item) {}
+                }
+
+                function createFilterRequest($request) {
+                    foreach ($request as $item) {
+//                        vardump($item['slug']);
+                        if($item['slug'][0]) {
+                            if($item['name'] === CATALOG_TAXONOMY) {
+                                vardump($item['slug']);
+                                $createRequirements[] = [
+                                    'taxonomy' => TAXONOMY_TYPE,
+                                    'term' => []
+                                ];
+                            }
+                        }
+//                        foreach ($item['slug'] as $slug) {
+//                            if($slug) {
+//                                $createRequirements[] = [
+//                                    'taxonomy' => $item['name'],
+//                                    'term' => $slug
+//                                ];
+////                                vardump($item['name']);
+////                                vardump($item['slug']);
+////                                createRequirements($item['name'], $item['slug']);
+//                            }
+//                        }
+                    }
+                    return $createRequirements;
+                }
+                $resultSort = createFilterRequest($getRequest);
+
+                vardump($resultSort);
+
+                function createRequirements($name, $slugs) {
+
+//                    foreach (TAXONOMYES as $taxonomyUrl) {
+//                        foreach (TAXONOMYES as $taxonomyUrl) {
+//                        }
+//                    }
+                }
+
+                $requirementsBrand = array( // Для бренда передать TAXONOMY_TYPE
+                    array(
+                        'taxonomy' => CATALOG_TAXONOMY,
+                        'term' => ['kislitsa', 'crazy-zombie', 'my-printsessa']
+                    )
+                );
+
+                $requirementsType = array( // Для Типа
+                    array(
+                        'taxonomy' => CATALOG_TAXONOMY,
+                        'term' => ['crazy-zombie', 'kislitsa', 'my-printsessa'],
+                    ),
+                    array(
+                        'taxonomy' => TAXONOMY_TYPE,
+                        'term' => ['caramel', 'zhevatelnaya-konfeta', 'zhevatelnaya-rezinka'], // Сортировка по всем категориям
+                    ),
+                );
+
+                $requirementsNews = array( // Для новинки
+                    array(
+                        'taxonomy' => TAXONOMY_NEWS,
+                        'term' => ['news-product']
+                    )
+                );
+
+                function fruit_query_mult_tax($array, $relation){
+                    wp_reset_query();
+                    $query = array('post_type' => CATALOG_TYPE,
+                        'tax_query' => array()
+                    );
+
+                    $query['tax_query'] = array(
+                        'relation' => $relation,
+                    );
+//                    vardump($array);
+                    foreach($array as $param){
+                        $query['tax_query'][]=  array(
+                            'taxonomy' => $param["taxonomy"],
+                            'terms' => $param["term"],
+                            'field' => 'slug',
+                        );
+                    }
+
+                    $result = new WP_Query($query);
+//                    $posts = $result->get_posts($result);
+                    return $result;
+//                    vardump($posts);
+                }
+                $result = null;
+                if($resultSort !== null) {
+                    $result = fruit_query_mult_tax($resultSort, 'AND');
+                }
+
+                // Создаем массив для группировки постов по категориям
+                $posts_by_category = [];
+
+                //                vardump($result->posts);
+
+                // Группируем посты по категориям
+                foreach ($result->posts as $post) {
+                    $post_categories = get_the_terms( $post->ID , CATALOG_TAXONOMY);
+                    if (!empty($post_categories)) {
+                        foreach ($post_categories as $category) {
+                            $posts_by_category[$category->term_id][] = $post;
+                        }
+                    }
+                }
+
+                ?>
+
+                <?php
+                // Выводим посты по категориям
+                foreach ($posts_by_category as $category_id => $category_posts) {
+                    $categoryName = get_term( $category_id , CATALOG_TAXONOMY);
+                    ?>
+
+                    <div class="product__category">
+                        <div class="product__heading">
+                            <h3 class="h4-style">
+                                <img class="icon-heading" src="<?php bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt="">
+                                <?php echo $categoryName->name; ?>
+                            </h3>
+                        </div>
+                        <div class="product__wrapper">
+                            <?php foreach ($category_posts as $post) {
+                                setup_postdata($post);
+                                ?>
+                                <div class="product__item">
+                                    <div class="product__top">
+                                        <span class="product__label">Новинка</span>
+                                        <a href="<?php the_permalink(); ?>" class="product__image">
+                                            <img src="<?php bloginfo('stylesheet_directory'); ?>/img/product/product-1.png" alt="<?php the_title(); ?>">
+                                        </a>
+                                    </div>
+                                    <div class="product__bottom">
+                                        <div class="product__article">Арт. 00001</div>
+                                        <a href="<?php the_permalink(); ?>" class="product__name"><?php the_title(); ?></a>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="product__button">
+                            <a href="#" class="button button--medium button--yellow">Показать еще</a>
+                        </div>
+                    </div>
+
+                <?php } ?>
+
+                <?php
+                //                foreach ($posts_by_category as $category_id => $category_posts) {
+                //                    $categoryName = get_term( $category_id , CATALOG_TAXONOMY);
+                //                    vardump($categoryName->name);
+                //                    foreach ($category_posts as $post) {
+                //                        setup_postdata($post);
+                //                        the_title();
+                //                        echo '<br>';
+                //                    }
+                //                }
+
+                // Сбрасываем запрос
+
+                wp_reset_postdata();
+
+                ?>
 
 
+                <?php
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                // Get Brands
                 if(!getCategorySlugUrl()) {
-                    getPostsBrand(getPostsBrands());
+//                    getPostsBrand(getPostsBrands());
                 } else {
 //                    vardump(getCategorySlugUrl());
-                    vardump('2');
+//                    vardump('2');
                 }
                     function getPostsBrandType($postsBrand, $postType) {
                         $args = array(
@@ -143,7 +337,7 @@
 
                 $category = get_term_by('slug', 'crazy-zombie1', CATALOG_TAXONOMY);
 //                vardump($category);
-                vardump('uuuuuuuuu');
+//                vardump('uuuuuuuuu');
 
                 $resultAttachmentTaxonomy = [];
                 function attachmentTaxonomy($array, $taxonomy) {
@@ -199,7 +393,7 @@
                             }
                         }
                     }
-                    vardump($resultCheckTaxonomy);
+//                    vardump($resultCheckTaxonomy);
                 }
 //                    checkTaxonomy($checkTaxonomy, $brands);
 
@@ -214,129 +408,7 @@
 //                }
 //                vardump($resultCheck);
 
-                $requirementsBrand = array( // Для бренда передать TAXONOMY_TYPE
-                    array(
-                        'taxonomy' => CATALOG_TAXONOMY,
-                        'term' => ['kislitsa', 'crazy-zombie']
-                    )
-                );
-
-                $requirementsType = array( // Для Типа
-                    array(
-                        'taxonomy' => CATALOG_TAXONOMY,
-                        'term' => ['crazy-zombie', 'kislitsa', 'my-printsessa'],
-                    ),
-                    array(
-                        'taxonomy' => TAXONOMY_TYPE,
-                        'term' => ['caramel', 'zhevatelnaya-konfeta', 'zhevatelnaya-rezinka'], // Сортировка по всем категориям
-                    ),
-                );
-
-                $requirementsNews = array( // Для новинки
-                    array(
-                        'taxonomy' => TAXONOMY_NEWS,
-                        'term' => ['news-product']
-                    )
-                );
-
-                function fruit_query_mult_tax($array, $relation){
-                    wp_reset_query();
-                    $query = array('post_type' => CATALOG_TYPE,
-                        'tax_query' => array()
-                    );
-
-                    $query['tax_query'] = array(
-                        'relation' => $relation,
-                    );
-                    foreach($array as $param){
-                        $query['tax_query'][]=  array(
-                            'taxonomy' => $param["taxonomy"],
-                            'terms' => $param["term"],
-                            'field' => 'slug',
-                        );
-                    }
-
-                    $result = new WP_Query($query);
-//                    $posts = $result->get_posts($result);
-                    return $result;
-//                    vardump($posts);
-                }
-                $result = fruit_query_mult_tax($requirementsType, 'AND');
-
-                // Создаем массив для группировки постов по категориям
-                $posts_by_category = [];
-
-//                vardump($result->posts);
-
-                // Группируем посты по категориям
-                foreach ($result->posts as $post) {
-                    $post_categories = get_the_terms( $post->ID , CATALOG_TAXONOMY);
-                    if (!empty($post_categories)) {
-                        foreach ($post_categories as $category) {
-                            $posts_by_category[$category->term_id][] = $post;
-                        }
-                    }
-                }
-
-                ?>
-
-                <?php
-                // Выводим посты по категориям
-                foreach ($posts_by_category as $category_id => $category_posts) {
-                    $categoryName = get_term( $category_id , CATALOG_TAXONOMY);
-                ?>
-
-                    <div class="product__category">
-                        <div class="product__heading">
-                            <h3 class="h4-style">
-                                <img class="icon-heading" src="<?php bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt="">
-                                <?php echo $categoryName->name; ?>
-                            </h3>
-                        </div>
-                        <div class="product__wrapper">
-                            <?php foreach ($category_posts as $post) {
-                                setup_postdata($post);
-                            ?>
-                            <div class="product__item">
-                                <div class="product__top">
-                                    <span class="product__label">Новинка</span>
-                                    <a href="<?php the_permalink(); ?>" class="product__image">
-                                        <img src="<?php bloginfo('stylesheet_directory'); ?>/img/product/product-1.png" alt="<?php the_title(); ?>">
-                                    </a>
-                                </div>
-                                <div class="product__bottom">
-                                    <div class="product__article">Арт. 00001</div>
-                                    <a href="<?php the_permalink(); ?>" class="product__name"><?php the_title(); ?></a>
-                                </div>
-                            </div>
-                            <?php } ?>
-                        </div>
-                        <div class="product__button">
-                            <a href="#" class="button button--medium button--yellow">Показать еще</a>
-                        </div>
-                    </div>
-
-                <?php } ?>
-
-                <?php
-//                foreach ($posts_by_category as $category_id => $category_posts) {
-//                    $categoryName = get_term( $category_id , CATALOG_TAXONOMY);
-//                    vardump($categoryName->name);
-//                    foreach ($category_posts as $post) {
-//                        setup_postdata($post);
-//                        the_title();
-//                        echo '<br>';
-//                    }
-//                }
-
-                // Сбрасываем запрос
-
-                wp_reset_postdata();
-
-                ?>
-
-
-                <?php
+//
 
                 // Category for filters
 
@@ -453,7 +525,9 @@
 
 <!--                        <h2>--><?php //echo $item->name ; ?><!--</h2>-->
 
-                        <?php while($query -> have_posts()) : $query -> the_post(); ?>
+                        <?php
+                        while($query -> have_posts()) : $query -> the_post();
+                        ?>
 <!--                            <p><a href="--><?php //the_permalink(); ?><!--">--><?php //the_title(); ?><!--</a></p>-->
 
                         <?php
