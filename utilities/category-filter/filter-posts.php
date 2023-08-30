@@ -3,6 +3,7 @@
     CONST CATALOG_TYPE = 'catalog';
     CONST CATALOG_TAXONOMY = 'catalog_category';
     CONST TAXONOMY_TYPE = 'catalog_type';
+    CONST TAXONOMY_NEWS = 'catalog_news';
     CONST BRAND_SLUG = 'brand';
     CONST TAXONOMY_BRANDS = 'brands';
 

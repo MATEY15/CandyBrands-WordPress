@@ -47,19 +47,19 @@ function candy_register_post_types() {
     register_taxonomy( 'catalog_category', [ 'catalog' ], [
         'label'                 => '', // определяется параметром $labels->name
         'labels'                => [
-            'name'              => 'Категории',
-            'singular_name'     => 'Категории',
-            'search_items'      => 'Найти Категории',
-            'all_items'         => 'Все Категории',
-            'view_item '        => 'Смотреть Категорию',
-            'parent_item'       => 'Родительсякая Категория',
-            'parent_item_colon' => 'Родительсякая Категория:',
-            'edit_item'         => 'Редактировать Категорию',
-            'update_item'       => 'Обновить Категорию',
-            'add_new_item'      => 'Добавить новую Категорию',
-            'new_item_name'     => 'Имя Категории',
-            'menu_name'         => 'Категории',
-            'back_to_items'     => '← Вернуться в Категорию',
+            'name'              => 'Бренд',
+            'singular_name'     => 'Бренд',
+            'search_items'      => 'Найти бренд',
+            'all_items'         => 'Все бренды',
+            'view_item '        => 'Смотреть бренд',
+            'parent_item'       => 'Родительский бренд',
+            'parent_item_colon' => 'Родительский бренд:',
+            'edit_item'         => 'Редактировать бренд',
+            'update_item'       => 'Обновить бренд',
+            'add_new_item'      => 'Добавить новый бренд',
+            'new_item_name'     => 'Имя бренда',
+            'menu_name'         => 'Бренд',
+            'back_to_items'     => '← Вернуться в бренд',
         ],
         'description'           => '', // описание таксономии
         'public'                => true,
@@ -85,19 +85,19 @@ function candy_register_post_types() {
     register_taxonomy( 'catalog_type', [ 'catalog' ], [
         'label'                 => '', // определяется параметром $labels->name
         'labels'                => [
-            'name'              => 'Тип',
-            'singular_name'     => 'Тип',
+            'name'              => 'Типы',
+            'singular_name'     => 'Типы',
             'search_items'      => 'Найти типы',
-            'all_items'         => 'Все Категории',
+            'all_items'         => 'Все типы',
             'view_item '        => 'Смотреть тип',
-            'parent_item'       => 'Родительсякий тип',
-            'parent_item_colon' => 'Родительсякий тип:',
+            'parent_item'       => 'Родительский тип',
+            'parent_item_colon' => 'Родительский тип:',
             'edit_item'         => 'Редактировать тип',
             'update_item'       => 'Обновить тип',
             'add_new_item'      => 'Добавить новый тип',
             'new_item_name'     => 'Имя типа',
-            'menu_name'         => 'Тип',
-            'back_to_items'     => '← Вернуться в тип',
+            'menu_name'         => 'Типы',
+            'back_to_items'     => '← Вернуться в типы',
         ],
         'description'           => '', // описание таксономии
         'public'                => true,
@@ -120,27 +120,65 @@ function candy_register_post_types() {
         //'update_count_callback' => '_update_post_term_count',
     ] );
 
-    register_taxonomy('events_tags', ['catalog'], [
-        'labels' => [
-            'name'              => _x('Теги', 'Теги события админка', 'oceanwp'),
-            'singular_name'     => _x('Тег', 'Теги события админка', 'oceanwp'),
-            'menu_name'         => _x('Теги', 'Теги события админка', 'oceanwp'),
-            'search_items'      => _x('Искать Теги', 'Теги события админка', 'oceanwp'),
-            'all_items'         => _x('Все Теги', 'Теги события админка', 'oceanwp'),
-            'parent_item'       => _x('Родитель Теги', 'Теги события админка', 'oceanwp'),
-            'parent_item_colon' => _x('Родитель Теги:', 'Теги события админка', 'oceanwp'),
-            'edit_item'         => _x('Редактировать Теги', 'Теги события админка', 'oceanwp'),
-            'update_item'       => _x('Обновить Тег', 'Теги события админка', 'oceanwp'),
-            'add_new_item'      => _x('Добавить новый Тег', 'Теги события админка', 'oceanwp'),
-            'new_item_name'     => _x('Новое имя Тега', 'Теги события админка', 'oceanwp'),
+    register_taxonomy( 'catalog_news', [ 'catalog' ], [
+        'label'                 => '', // определяется параметром $labels->name
+        'labels'                => [
+            'name'              => 'Новинки',
+            'singular_name'     => 'Новинки',
+            'search_items'      => 'Найти новинки',
+            'all_items'         => 'Все новинки',
+            'view_item '        => 'Смотреть новинки',
+            'parent_item'       => 'Родительские новинки',
+            'parent_item_colon' => 'Родительские новинки:',
+            'edit_item'         => 'Редактировать новинки',
+            'update_item'       => 'Обновить новинки',
+            'add_new_item'      => 'Добавить новые новинки',
+            'new_item_name'     => 'Имя новинки',
+            'menu_name'         => 'Новинки',
+            'back_to_items'     => '← Вернуться в новинки',
         ],
+        'description'           => '', // описание таксономии
         'public'                => true,
-        'show_in_rest' => true,
+        // 'publicly_queryable'    => null, // равен аргументу public
+        // 'show_in_nav_menus'     => true, // равен аргументу public
+        // 'show_ui'               => true, // равен аргументу public
+        // 'show_in_menu'          => true, // равен аргументу show_ui
+        // 'show_tagcloud'         => true, // равен аргументу show_ui
+        // 'show_in_quick_edit'    => null, // равен аргументу show_ui
         'hierarchical'          => true,
-        'update_count_callback' => '_update_post_term_count',
-        'rewrite' => ['slug' => 'events_tags'],
-        'meta_box_cb' => 'post_tags_meta_box',
-        'show_admin_column' => true
 
-    ]);
+        'rewrite'               => true,
+        //'query_var'             => $taxonomy, // название параметра запроса
+        'capabilities'          => array(),
+        'meta_box_cb'           => null, // html метабокса. callback: `post_categories_meta_box` или `post_tags_meta_box`. false — метабокс отключен.
+        'show_admin_column'     => false, // авто-создание колонки таксы в таблице ассоциированного типа записи. (с версии 3.5)
+        'show_in_rest'          => true, // добавить в REST API
+        'rest_base'             => null, // $taxonomy
+        // '_builtin'              => false,
+        //'update_count_callback' => '_update_post_term_count',
+    ] );
+
+//    register_taxonomy('events_tags', ['catalog'], [
+//        'labels' => [
+//            'name'              => _x('Теги', 'Теги события админка', 'oceanwp'),
+//            'singular_name'     => _x('Тег', 'Теги события админка', 'oceanwp'),
+//            'menu_name'         => _x('Теги', 'Теги события админка', 'oceanwp'),
+//            'search_items'      => _x('Искать Теги', 'Теги события админка', 'oceanwp'),
+//            'all_items'         => _x('Все Теги', 'Теги события админка', 'oceanwp'),
+//            'parent_item'       => _x('Родитель Теги', 'Теги события админка', 'oceanwp'),
+//            'parent_item_colon' => _x('Родитель Теги:', 'Теги события админка', 'oceanwp'),
+//            'edit_item'         => _x('Редактировать Теги', 'Теги события админка', 'oceanwp'),
+//            'update_item'       => _x('Обновить Тег', 'Теги события админка', 'oceanwp'),
+//            'add_new_item'      => _x('Добавить новый Тег', 'Теги события админка', 'oceanwp'),
+//            'new_item_name'     => _x('Новое имя Тега', 'Теги события админка', 'oceanwp'),
+//        ],
+//        'public'                => true,
+//        'show_in_rest' => true,
+//        'hierarchical'          => true,
+//        'update_count_callback' => '_update_post_term_count',
+//        'rewrite' => ['slug' => 'events_tags'],
+//        'meta_box_cb' => 'post_tags_meta_box',
+//        'show_admin_column' => true
+//
+//    ]);
 }
