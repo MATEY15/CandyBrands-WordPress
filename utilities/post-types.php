@@ -85,8 +85,8 @@ function candy_register_post_types() {
     register_taxonomy( 'catalog_type', [ 'catalog' ], [
         'label'                 => '', // определяется параметром $labels->name
         'labels'                => [
-            'name'              => 'Типы',
-            'singular_name'     => 'Типы',
+            'name'              => 'Тип',
+            'singular_name'     => 'Тип',
             'search_items'      => 'Найти типы',
             'all_items'         => 'Все типы',
             'view_item '        => 'Смотреть тип',
@@ -96,7 +96,7 @@ function candy_register_post_types() {
             'update_item'       => 'Обновить тип',
             'add_new_item'      => 'Добавить новый тип',
             'new_item_name'     => 'Имя типа',
-            'menu_name'         => 'Типы',
+            'menu_name'         => 'Тип',
             'back_to_items'     => '← Вернуться в типы',
         ],
         'description'           => '', // описание таксономии

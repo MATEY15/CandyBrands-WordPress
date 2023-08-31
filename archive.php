@@ -46,15 +46,23 @@
                     return $result;
                 };
                 $getRequest = getRequest();
+//                vardump($getRequest);
 
-//                vardump($getRequest);
                 $createRequirements = [];
-//                vardump($getRequest);
+
                 $getTerms = getTerms(TAXONOMYES);
 //                vardump($getTerms);
 
                 function termsSort($terms, $taxonomy) {
-//                    foreach ($getTerms as $item) {}
+                    $result = [];
+                    foreach ($terms as $item) {
+                        if($item['slug'] === $taxonomy) {
+                            foreach ($item['terms'] as $term) {
+                                $result[] = $term->slug;
+                            }
+                        }
+                    }
+                    return $result;
                 }
 
                 function createFilterRequest($request) {
@@ -62,10 +70,12 @@
 //                        vardump($item['slug']);
                         if($item['slug'][0]) {
                             if($item['name'] === CATALOG_TAXONOMY) {
-                                vardump($item['slug']);
+//                                vardump($item['slug']);
+//                                termsSort(getTerms(TAXONOMYES), TAXONOMY_TYPE);
+//                                $createRequirements[] = [];
                                 $createRequirements[] = [
                                     'taxonomy' => TAXONOMY_TYPE,
-                                    'term' => []
+                                    'term' => termsSort(getTerms(TAXONOMYES), TAXONOMY_TYPE)
                                 ];
                             }
                         }
@@ -85,7 +95,9 @@
                 }
                 $resultSort = createFilterRequest($getRequest);
 
-                vardump($resultSort);
+//                vardump('$resultSort');
+//                vardump($resultSort);
+//                vardump('$resultSort');
 
                 function createRequirements($name, $slugs) {
 
@@ -155,7 +167,7 @@
 
                 // Группируем посты по категориям
                 foreach ($result->posts as $post) {
-                    $post_categories = get_the_terms( $post->ID , CATALOG_TAXONOMY);
+                    $post_categories = get_the_terms( $post->ID , TAXONOMY_TYPE); // Сюда тип для фильтра
                     if (!empty($post_categories)) {
                         foreach ($post_categories as $category) {
                             $posts_by_category[$category->term_id][] = $post;
@@ -168,7 +180,7 @@
                 <?php
                 // Выводим посты по категориям
                 foreach ($posts_by_category as $category_id => $category_posts) {
-                    $categoryName = get_term( $category_id , CATALOG_TAXONOMY);
+                    $categoryName = get_term( $category_id , TAXONOMY_TYPE); // Сюда тип для фильтра
                     ?>
 
                     <div class="product__category">
