@@ -31,27 +31,80 @@ Template Name: Home Page
     </div>
     <div class="new-products">
         <div class="layout">
-            <div class="new-products__heading"><h2 class="h2-style"><img class="icon-heading"
-                                                                         src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt=""> Новинки
+            <div class="new-products__heading">
+                <h2 class="h2-style">
+                    <img class="icon-heading" src="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt="">
+                    Новинки1
                 </h2>
                 <div class="new-products__navigation"></div>
             </div>
+            <?php
+            $post_objects = get_field('slider_home');
+            var_dump($post_objects);
+            echo "<br>";
+            var_dump('$post_objects');
+            ?>
             <div class="new-products__slider">
+
+                <?php
+
+
+                if( $post_objects ): ?>
+                    <?php foreach( $post_objects as $post): ?>
+                    <?php setup_postdata($post); ?>
+                    <div class="new-products__item">
+                        <div class="new-products__top">
+                            <a href="<?php the_permalink(); ?>" class="new-products__preview" style="background-color:#afe7f3">
+                                <picture>
+                                    <source type="image/png" srcset="<?php echo bloginfo('stylesheet_directory'); ?>/img/new-products/new-products-1-1x.png, <?php echo bloginfo('stylesheet_directory'); ?>/img/new-products/new-products-1-3x.png 3x">
+                                    <img src="<?php echo bloginfo('stylesheet_directory'); ?>/img/new-products/new-products-1-3x.png" width="305" alt="Candy Preview">
+                                </picture>
+                                <span class="new-products__arrow">
+                                <svg class="icon-arrow-rotate" width="39px" height="39px">
+                                    <use xlink:href="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-arrow-rotate"></use>
+                                </svg>
+                            </span>
+                            </a>
+                            <span class="new-products__label">Новинка</span>
+                        </div>
+                        <div class="new-products__bottom">
+                            <p class="new-products__cat">Crazy Zombie</p>
+                            <a href="<?php the_permalink(); ?>" class="new-products__title brodway-font">
+                                Карамель на палочке с шипучкой
+                            </a>
+                        </div>
+<!--                            <li>-->
+<!--                                <a href="--><?php //the_permalink(); ?><!--">--><?php //the_title(); ?><!--</a>-->
+<!--                                <span>Объект записи произвольного поля: --><?php //the_field('field_name'); ?><!--</span>-->
+<!--                            </li>-->
+                    </div>
+                    <?php endforeach; ?>
+                    <?php wp_reset_postdata(); // ВАЖНО - сбросьте значение $post object чтобы избежать ошибок в дальнейшем коде ?>
+                <?php endif;
+
+                ?>
+
                 <div class="new-products__item">
-                    <div class="new-products__top"><a href="#" class="new-products__preview"
-                                                      style="background-color:#afe7f3">
+                    <div class="new-products__top">
+                        <a href="#" class="new-products__preview" style="background-color:#afe7f3">
                             <picture>
-                                <source type="image/png"
-                                        srcset="<?php echo bloginfo('stylesheet_directory'); ?>/img/new-products/new-products-1-1x.png, <?php echo bloginfo('stylesheet_directory'); ?>/img/new-products/new-products-1-3x.png 3x">
+                                <source type="image/png" srcset="<?php echo bloginfo('stylesheet_directory'); ?>/img/new-products/new-products-1-1x.png, <?php echo bloginfo('stylesheet_directory'); ?>/img/new-products/new-products-1-3x.png 3x">
                                 <img src="<?php echo bloginfo('stylesheet_directory'); ?>/img/new-products/new-products-1-3x.png" width="305" alt="Candy Preview">
                             </picture>
-                            <span class="new-products__arrow"> <svg class="icon-arrow-rotate" width="39px" height="39px"> <use
-                                        xlink:href="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-arrow-rotate"></use> </svg> </span> </a> <span
-                            class="new-products__label">Новинка</span></div>
-                    <div class="new-products__bottom"><p class="new-products__cat">Crazy Zombie</p> <a href=""
-                                                                                                       class="new-products__title brodway-font">
-                            Карамель на палочке с шипучкой </a></div>
+                            <span class="new-products__arrow">
+                                <svg class="icon-arrow-rotate" width="39px" height="39px">
+                                    <use xlink:href="<?php echo bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-arrow-rotate"></use>
+                                </svg>
+                            </span>
+                        </a>
+                        <span class="new-products__label">Новинка</span>
+                    </div>
+                    <div class="new-products__bottom">
+                        <p class="new-products__cat">Crazy Zombie</p>
+                        <a href="<?php the_permalink(); ?>" class="new-products__title brodway-font">Карамель на палочке с шипучкой</a>
+                    </div>
                 </div>
+
                 <div class="new-products__item">
                     <div class="new-products__top"><a href="#" class="new-products__preview"
                                                       style="background-color:#ffd78a">

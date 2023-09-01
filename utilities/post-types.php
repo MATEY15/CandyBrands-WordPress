@@ -158,27 +158,27 @@ function candy_register_post_types() {
         //'update_count_callback' => '_update_post_term_count',
     ] );
 
-//    register_taxonomy('events_tags', ['catalog'], [
-//        'labels' => [
-//            'name'              => _x('Теги', 'Теги события админка', 'oceanwp'),
-//            'singular_name'     => _x('Тег', 'Теги события админка', 'oceanwp'),
-//            'menu_name'         => _x('Теги', 'Теги события админка', 'oceanwp'),
-//            'search_items'      => _x('Искать Теги', 'Теги события админка', 'oceanwp'),
-//            'all_items'         => _x('Все Теги', 'Теги события админка', 'oceanwp'),
-//            'parent_item'       => _x('Родитель Теги', 'Теги события админка', 'oceanwp'),
-//            'parent_item_colon' => _x('Родитель Теги:', 'Теги события админка', 'oceanwp'),
-//            'edit_item'         => _x('Редактировать Теги', 'Теги события админка', 'oceanwp'),
-//            'update_item'       => _x('Обновить Тег', 'Теги события админка', 'oceanwp'),
-//            'add_new_item'      => _x('Добавить новый Тег', 'Теги события админка', 'oceanwp'),
-//            'new_item_name'     => _x('Новое имя Тега', 'Теги события админка', 'oceanwp'),
-//        ],
-//        'public'                => true,
-//        'show_in_rest' => true,
-//        'hierarchical'          => true,
-//        'update_count_callback' => '_update_post_term_count',
-//        'rewrite' => ['slug' => 'events_tags'],
-//        'meta_box_cb' => 'post_tags_meta_box',
-//        'show_admin_column' => true
-//
-//    ]);
+    register_taxonomy('events_tags', ['catalog'], [
+        'labels' => [
+            'name'              => _x('Теги', 'Теги события админка', 'oceanwp'),
+            'singular_name'     => _x('Тег', 'Теги события админка', 'oceanwp'),
+            'menu_name'         => _x('Теги', 'Теги события админка', 'oceanwp'),
+            'search_items'      => _x('Искать Теги', 'Теги события админка', 'oceanwp'),
+            'all_items'         => _x('Все Теги', 'Теги события админка', 'oceanwp'),
+            'parent_item'       => _x('Родитель Теги', 'Теги события админка', 'oceanwp'),
+            'parent_item_colon' => _x('Родитель Теги:', 'Теги события админка', 'oceanwp'),
+            'edit_item'         => _x('Редактировать Теги', 'Теги события админка', 'oceanwp'),
+            'update_item'       => _x('Обновить Тег', 'Теги события админка', 'oceanwp'),
+            'add_new_item'      => _x('Добавить новый Тег', 'Теги события админка', 'oceanwp'),
+            'new_item_name'     => _x('Новое имя Тега', 'Теги события админка', 'oceanwp'),
+        ],
+        'public'                => true,
+        'show_in_rest' => true,
+        'hierarchical'          => true,
+        'update_count_callback' => '_update_post_term_count',
+        'rewrite' => ['slug' => 'events_tags'],
+        'meta_box_cb' => 'post_tags_meta_box',
+        'show_admin_column' => true
+
+    ]);
 }

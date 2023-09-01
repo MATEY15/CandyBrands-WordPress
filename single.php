@@ -42,13 +42,15 @@
                 </div>
                 <div class="product-preview__info">
                     <div class="product-preview__info-item">
-                        <div class="product-preview__info-img"><img
-                                src="/img/product-preview/product-preview-info-1.png" alt=""></div>
-                        <span> Производитель: Китай </span></div>
+                        <div class="product-preview__info-img">
+                            <img src="/img/product-preview/product-preview-info-1.png" alt=""></div>
+                        <span> Производитель: Китай </span>
+                    </div>
                     <div class="product-preview__info-item">
-                        <div class="product-preview__info-img"><img
-                                src="/img/product-preview/product-preview-info-2.png" alt=""></div>
-                        <span> Натуральные красители </span></div>
+                        <div class="product-preview__info-img">
+                            <img src="/img/product-preview/product-preview-info-2.png" alt=""></div>
+                        <span> Натуральные красители </span>
+                    </div>
                 </div>
             </div>
             <div class="product-preview__description">
@@ -57,7 +59,9 @@
                         <?php the_title(); ?>
                     </h1>
                 </div>
-                <div class="product-preview__description-code">Арт. 000FF</div>
+                <?php if(get_field('product_article')) { ?>
+                <div class="product-preview__description-code">Арт. <?php echo get_field('product_article'); ?></div>
+                <?php } ?>
                 <dl class="product-preview__desc">
                     <dt>Описание</dt>
                     <dd>

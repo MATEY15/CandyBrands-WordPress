@@ -6,7 +6,7 @@
     <?php if ( function_exists( 'dimox_breadcrumbs' ) ) dimox_breadcrumbs(); ?>
     <div class="catalog">
         <div class="layout catalog__heading">
-            <h2 class="h2-style">Archive Каталог товаров</h2>
+            <h2 class="h2-style">Каталог товаров</h2>
         </div>
         <div class="catalog__wrapper layout">
             <div class="catalog__filter-wrapper">
@@ -37,7 +37,6 @@
                 function getRequest() {
                     $result = [];
                     foreach (TAXONOMYES as $taxonomyUrl) {
-//                        vardump($_GET[$taxonomyUrl]);
                         $result[] = [
                             'name' => $taxonomyUrl,
                             'slug' => explode(",", $_GET[$taxonomyUrl])
@@ -45,51 +44,34 @@
                     }
                     return $result;
                 };
-                $getRequest = getRequest();
-//                vardump($getRequest);
+                $getRequest = getRequest(); // Получение каталогов
 
                 $createRequirements = [];
 
                 $getTerms = getTerms(TAXONOMYES);
-//                vardump($getTerms);
 
-                function termsSort($terms, $taxonomy) {
-                    $result = [];
-                    foreach ($terms as $item) {
-                        if($item['slug'] === $taxonomy) {
-                            foreach ($item['terms'] as $term) {
-                                $result[] = $term->slug;
-                            }
-                        }
-                    }
-                    return $result;
+                $checkedTaxonomyView = CATALOG_TAXONOMY;
+                function checkedTaxonomyView($tax) {
+                    global $checkedTaxonomyView;
+                    $checkedTaxonomyView = $tax;
                 }
+                checkedTaxonomyView(TAXONOMY_TYPE);
+
 
                 function createFilterRequest($request) {
                     foreach ($request as $item) {
-//                        vardump($item['slug']);
                         if($item['slug'][0]) {
+                            $createRequirements[] = [
+                                'taxonomy' => $item['name'],
+                                'term' => $item['slug']
+                            ];
                             if($item['name'] === CATALOG_TAXONOMY) {
-//                                vardump($item['slug']);
-//                                termsSort(getTerms(TAXONOMYES), TAXONOMY_TYPE);
-//                                $createRequirements[] = [];
-                                $createRequirements[] = [
-                                    'taxonomy' => TAXONOMY_TYPE,
-                                    'term' => termsSort(getTerms(TAXONOMYES), TAXONOMY_TYPE)
-                                ];
+                                checkedTaxonomyView(TAXONOMY_TYPE);
+                            }
+                            if($item['name'] === TAXONOMY_TYPE or $item['name'] === TAXONOMY_NEWS) {
+                                checkedTaxonomyView(CATALOG_TAXONOMY);
                             }
                         }
-//                        foreach ($item['slug'] as $slug) {
-//                            if($slug) {
-//                                $createRequirements[] = [
-//                                    'taxonomy' => $item['name'],
-//                                    'term' => $slug
-//                                ];
-////                                vardump($item['name']);
-////                                vardump($item['slug']);
-////                                createRequirements($item['name'], $item['slug']);
-//                            }
-//                        }
                     }
                     return $createRequirements;
                 }
@@ -115,12 +97,12 @@
                 );
 
                 $requirementsType = array( // Для Типа
+//                    array(
+//                        'taxonomy' => CATALOG_TAXONOMY,
+//                        'term' => ['crazy-zombie', 'kislitsa', 'my-printsessa'],
+//                    ),
                     array(
                         'taxonomy' => CATALOG_TAXONOMY,
-                        'term' => ['crazy-zombie', 'kislitsa', 'my-printsessa'],
-                    ),
-                    array(
-                        'taxonomy' => TAXONOMY_TYPE,
                         'term' => ['caramel', 'zhevatelnaya-konfeta', 'zhevatelnaya-rezinka'], // Сортировка по всем категориям
                     ),
                 );
@@ -151,23 +133,26 @@
                     }
 
                     $result = new WP_Query($query);
-//                    $posts = $result->get_posts($result);
                     return $result;
-//                    vardump($posts);
+
                 }
+
                 $result = null;
                 if($resultSort !== null) {
                     $result = fruit_query_mult_tax($resultSort, 'AND');
+                } else {
+                    $checkedTaxonomyView = CATALOG_TAXONOMY;
+                    $result = fruit_query_mult_tax($requirementsBrand, 'AND');
                 }
+
+                if($result) {
 
                 // Создаем массив для группировки постов по категориям
                 $posts_by_category = [];
 
-                //                vardump($result->posts);
-
                 // Группируем посты по категориям
                 foreach ($result->posts as $post) {
-                    $post_categories = get_the_terms( $post->ID , TAXONOMY_TYPE); // Сюда тип для фильтра
+                    $post_categories = get_the_terms( $post->ID , $checkedTaxonomyView); // Сюда тип для фильтра
                     if (!empty($post_categories)) {
                         foreach ($post_categories as $category) {
                             $posts_by_category[$category->term_id][] = $post;
@@ -175,12 +160,10 @@
                     }
                 }
 
-                ?>
-
-                <?php
+                if($posts_by_category) {
                 // Выводим посты по категориям
                 foreach ($posts_by_category as $category_id => $category_posts) {
-                    $categoryName = get_term( $category_id , TAXONOMY_TYPE); // Сюда тип для фильтра
+                    $categoryName = get_term( $category_id , $checkedTaxonomyView); // Сюда тип для фильтра
                     ?>
 
                     <div class="product__category">
@@ -196,13 +179,24 @@
                                 ?>
                                 <div class="product__item">
                                     <div class="product__top">
-                                        <span class="product__label">Новинка</span>
+                                        <?php
+                                            $terms = get_the_terms(get_the_ID($post->ID), TAXONOMY_NEWS);
+
+                                            if ($terms && !is_wp_error($terms)) {
+                                                $term_names = wp_list_pluck($terms, 'name');
+                                                $term_text = implode(', ', $term_names);
+                                                $term_text === 'Новинки' ? $term_text = 'Новинка' : $term_text;
+                                        ?>
+                                        <span class="product__label"><?php echo $term_text; ?></span>
+                                        <?php } ?>
                                         <a href="<?php the_permalink(); ?>" class="product__image">
                                             <img src="<?php bloginfo('stylesheet_directory'); ?>/img/product/product-1.png" alt="<?php the_title(); ?>">
                                         </a>
                                     </div>
                                     <div class="product__bottom">
-                                        <div class="product__article">Арт. 00001</div>
+                                    <?php if(get_field('product_article')) { ?>
+                                        <div class="product__article">Арт. <?php echo get_field('product_article'); ?></div>
+                                    <?php } ?>
                                         <a href="<?php the_permalink(); ?>" class="product__name"><?php the_title(); ?></a>
                                     </div>
                                 </div>
@@ -213,6 +207,19 @@
                         </div>
                     </div>
 
+                <?php }
+                } else { ?>
+                    <div class="product__error">
+                        <h3 class="h4-style">По вашему запросу ничего не найдено =(</h3>
+                        <a href="#" class="button button--medium button--white">Сбросить фильтры</a>
+                    </div>
+                <?php }
+
+                } else { ?>
+                    <div class="product__error">
+                        <h3 class="h4-style">По вашему запросу ничего не найдено =(</h3>
+                        <a href="#" class="button button--medium button--white">Сбросить фильтры</a>
+                    </div>
                 <?php } ?>
 
                 <?php
