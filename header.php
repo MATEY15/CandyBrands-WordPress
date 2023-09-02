@@ -27,7 +27,7 @@
             <?php my_nav_menu( [ 'theme_location'  => 'top' ] ); ?>
         </div>
         <div class="header__logo">
-            <a class="logo" href="<?php home_url(); ?>">
+            <a class="logo" href="<?php echo get_home_url(); ?>">
                 <img id="main-logo" src="<?php bloginfo('stylesheet_directory'); ?>/img/logo.svg" alt="CandyBrands">
                 <span class="logo-icon">
                     <svg width="29" height="14" viewBox="0 0 29 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -50,7 +50,7 @@
                 if( $load_link !== "" ):
             ?>
             <div class="download-katalog">
-                <a href="<?php echo get_field('load_catalog_link', 'options' ); ?>" class="download-katalog__link">
+                <a href="<?php echo get_field('load_catalog_link', 'options' ); ?>" class="download-katalog__link" download>
                     <svg class="icon-download" width="18px" height="18px">
                         <use xlink:href="<?php bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-download"></use>
                     </svg>
@@ -108,11 +108,19 @@
                         </div>
                     </form>
                 </div>
-                <div class="download-katalog"><a href="#" class="download-katalog__link">
-                        <svg class="icon-download" width="18px" height="18px">
-                            <use xlink:href="<?php bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-download"></use>
-                        </svg>
-                        Каталог PDF </a></div>
+                <?php
+                $load_link = get_field('load_catalog', 'options' );
+                if( $load_link !== "" ):
+                    ?>
+                    <div class="download-katalog">
+                        <a href="<?php echo get_field('load_catalog_link', 'options' ); ?>" class="download-katalog__link" download>
+                            <svg class="icon-download" width="18px" height="18px">
+                                <use xlink:href="<?php bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-download"></use>
+                            </svg>
+                            <?php echo get_field('load_catalog', 'options' ); ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

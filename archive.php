@@ -116,7 +116,9 @@
 
                 function fruit_query_mult_tax($array, $relation){
                     wp_reset_query();
-                    $query = array('post_type' => CATALOG_TYPE,
+                    $query = array(
+                        'posts_per_page' => -1,
+                        'post_type' => CATALOG_TYPE,
                         'tax_query' => array()
                     );
 
