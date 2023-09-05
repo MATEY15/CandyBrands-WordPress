@@ -83,130 +83,95 @@
             </div>
         </div>
     </div>
+
+
+    <?php
+
+
+    $current_post_id = get_the_ID();
+    $related_tax = TAXONOMY_TYPE;
+    $cats_tags_or_taxes = wp_get_object_terms( $current_post_id, $related_tax, array( 'fields' => 'ids' ) );
+
+    $args = array(
+        'posts_per_page' => 8,
+        'tax_query' => array(
+            array(
+                'taxonomy' => $related_tax,
+                'field' => 'id',
+                'include_children' => false,
+                'terms' => $cats_tags_or_taxes,
+                'post__not_in' => array($current_post_id),
+                'operator' => 'IN',
+                'caller_get_posts'=>1
+            )
+        )
+    );
+    $relation_query = new WP_Query( $args );
+
+    if( $relation_query->have_posts() ) : ?>
     <div class="new-products new-products--similar">
         <div class="layout">
-            <div class="new-products__heading"><h2 class="h2-style"><img class="icon-heading"
-                                                                         src="/img/icons/icon-cl.svg" alt=""> Похожие
-                    товары </h2>
+            <div class="new-products__heading">
+                <h2 class="h2-style">
+                    <img class="icon-heading" src="/img/icons/icon-cl.svg" alt="">
+                    Похожие товары
+                </h2>
                 <div class="new-products__navigation"></div>
             </div>
             <div class="new-products__slider">
+
+                <?php while( $relation_query->have_posts() ) : $relation_query->the_post(); ?>
+
                 <div class="new-products__item">
-                    <div class="new-products__top"><a href="#" class="new-products__preview"
-                                                      style="background-color:#afe7f3">
+                    <div class="new-products__top">
+                        <a href="#" class="new-products__preview" style="background-color:#afe7f3">
                             <picture>
-                                <source type="image/png"
-                                        srcset="/img/new-products/new-products-1-1x.png, /img/new-products/new-products-1-3x.png 3x">
+                                <source type="image/png" srcset="/img/new-products/new-products-1-1x.png, /img/new-products/new-products-1-3x.png 3x">
                                 <img src="/img/new-products/new-products-1-3x.png" width="305" alt="Candy Preview">
                             </picture>
-                            <span class="new-products__arrow"> <svg class="icon-arrow-rotate" width="39px" height="39px"> <use
-                                        xlink:href="/img/icons/sprites.svg#icon-arrow-rotate"></use> </svg> </span> </a> <span
-                            class="new-products__label">Новинка</span></div>
-                    <div class="new-products__bottom"><p class="new-products__cat">Crazy Zombie</p> <a href=""
-                                                                                                       class="new-products__title brodway-font">
-                            Карамель на палочке с шипучкой </a></div>
+                            <span class="new-products__arrow">
+                                <svg class="icon-arrow-rotate" width="39px" height="39px">
+                                    <use xlink:href="/img/icons/sprites.svg#icon-arrow-rotate"></use>
+                                </svg>
+                            </span>
+                        </a>
+                        <?php
+                        $post_type = get_post_type($relation_query->post->ID);
+                        $terms = get_the_terms($relation_query->post->ID, TAXONOMY_NEWS);
+                        if($terms[0]->name) {
+                            ?>
+                            <span class="new-products__label">
+                                <?php
+
+                                if($terms[0]->name === 'Новинки') {
+                                    echo 'Новинка';
+                                } else {
+                                    echo $terms[0]->name;
+                                }
+                                ?>
+                            </span>
+                        <?php } ?>
+                    </div>
+                    <div class="new-products__bottom">
+                        <?php
+                        $terms = get_the_terms($relation_query->post->ID, CATALOG_TAXONOMY);
+                        ?>
+                        <p class="new-products__cat"><?php echo $terms[0]->name; ?></p>
+                        <a href="<?php echo get_permalink( $relation_query->post->ID )?>" class="new-products__title brodway-font"><?php echo $relation_query->post->post_title?></a>
+                    </div>
                 </div>
-                <div class="new-products__item">
-                    <div class="new-products__top"><a href="#" class="new-products__preview"
-                                                      style="background-color:#ffd78a">
-                            <picture>
-                                <source type="image/png"
-                                        srcset="/img/new-products/new-products-2-3x.png, /img/new-products/new-products-2-3x.png 3x">
-                                <img src="/img/new-products/new-products-2-3x.png" width="305" alt="Candy Preview">
-                            </picture>
-                            <span class="new-products__arrow"> <svg class="icon-arrow-rotate" width="39px" height="39px"> <use
-                                        xlink:href="/img/icons/sprites.svg#icon-arrow-rotate"></use> </svg> </span> </a></div>
-                    <div class="new-products__bottom"><p class="new-products__cat">Crazy Zombie</p> <a href=""
-                                                                                                       class="new-products__title brodway-font">
-                            Жевательный мармелад </a></div>
-                </div>
-                <div class="new-products__item">
-                    <div class="new-products__top"><a href="#" class="new-products__preview"
-                                                      style="background-color:#d5c2ff">
-                            <picture>
-                                <source type="image/png"
-                                        srcset="/img/new-products/new-products-1-3x.png, /img/new-products/new-products-1-3x.png 3x">
-                                <img src="/img/new-products/new-products-1-3x.png" width="305" alt="Candy Preview">
-                            </picture>
-                            <span class="new-products__arrow"> <svg class="icon-arrow-rotate" width="39px" height="39px"> <use
-                                        xlink:href="/img/icons/sprites.svg#icon-arrow-rotate"></use> </svg> </span> </a></div>
-                    <div class="new-products__bottom"><p class="new-products__cat">Crazy Zombie</p> <a href=""
-                                                                                                       class="new-products__title brodway-font">
-                            Жевательный мармелад </a></div>
-                </div>
-                <div class="new-products__item">
-                    <div class="new-products__top"><a href="#" class="new-products__preview"
-                                                      style="background-color:#fdc3e3">
-                            <picture>
-                                <source type="image/png"
-                                        srcset="/img/new-products/new-products-2-3x.png, /img/new-products/new-products-2-3x.png 3x">
-                                <img src="/img/new-products/new-products-2-3x.png" width="305" alt="Candy Preview">
-                            </picture>
-                            <span class="new-products__arrow"> <svg class="icon-arrow-rotate" width="39px" height="39px"> <use
-                                        xlink:href="/img/icons/sprites.svg#icon-arrow-rotate"></use> </svg> </span> </a> <span
-                            class="new-products__label">Скоро в продаже</span></div>
-                    <div class="new-products__bottom"><p class="new-products__cat">Crazy Zombie</p> <a href=""
-                                                                                                       class="new-products__title brodway-font">
-                            Карамель на палочке с шипучкой </a></div>
-                </div>
-                <div class="new-products__item">
-                    <div class="new-products__top"><a href="#" class="new-products__preview"
-                                                      style="background-color:#afe7f3">
-                            <picture>
-                                <source type="image/png"
-                                        srcset="/img/new-products/new-products-1-1x.png, /img/new-products/new-products-1-3x.png 3x">
-                                <img src="/img/new-products/new-products-1-3x.png" width="305" alt="Candy Preview">
-                            </picture>
-                            <span class="new-products__arrow"> <svg class="icon-arrow-rotate" width="39px" height="39px"> <use
-                                        xlink:href="/img/icons/sprites.svg#icon-arrow-rotate"></use> </svg> </span> </a> <span
-                            class="new-products__label">Новинка</span></div>
-                    <div class="new-products__bottom"><p class="new-products__cat">Crazy Zombie</p> <a href=""
-                                                                                                       class="new-products__title brodway-font">
-                            Карамель на палочке с шипучкой </a></div>
-                </div>
-                <div class="new-products__item">
-                    <div class="new-products__top"><a href="#" class="new-products__preview"
-                                                      style="background-color:#ffd78a">
-                            <picture>
-                                <source type="image/png"
-                                        srcset="/img/new-products/new-products-2-3x.png, /img/new-products/new-products-2-3x.png 3x">
-                                <img src="/img/new-products/new-products-2-3x.png" width="305" alt="Candy Preview">
-                            </picture>
-                            <span class="new-products__arrow"> <svg class="icon-arrow-rotate" width="39px" height="39px"> <use
-                                        xlink:href="/img/icons/sprites.svg#icon-arrow-rotate"></use> </svg> </span> </a></div>
-                    <div class="new-products__bottom"><p class="new-products__cat">Crazy Zombie</p> <a href=""
-                                                                                                       class="new-products__title brodway-font">
-                            Жевательный мармелад </a></div>
-                </div>
-                <div class="new-products__item">
-                    <div class="new-products__top"><a href="#" class="new-products__preview"
-                                                      style="background-color:#d5c2ff">
-                            <picture>
-                                <source type="image/png"
-                                        srcset="/img/new-products/new-products-1-3x.png, /img/new-products/new-products-1-3x.png 3x">
-                                <img src="/img/new-products/new-products-1-3x.png" width="305" alt="Candy Preview">
-                            </picture>
-                            <span class="new-products__arrow"> <svg class="icon-arrow-rotate" width="39px" height="39px"> <use
-                                        xlink:href="/img/icons/sprites.svg#icon-arrow-rotate"></use> </svg> </span> </a></div>
-                    <div class="new-products__bottom"><p class="new-products__cat">Crazy Zombie</p> <a href=""
-                                                                                                       class="new-products__title brodway-font">
-                            Жевательный мармелад </a></div>
-                </div>
-                <div class="new-products__item">
-                    <div class="new-products__top"><a href="#" class="new-products__preview"
-                                                      style="background-color:#fdc3e3">
-                            <picture>
-                                <source type="image/png"
-                                        srcset="/img/new-products/new-products-2-3x.png, /img/new-products/new-products-2-3x.png 3x">
-                                <img src="/img/new-products/new-products-2-3x.png" width="305" alt="Candy Preview">
-                            </picture>
-                            <span class="new-products__arrow"> <svg class="icon-arrow-rotate" width="39px" height="39px"> <use
-                                        xlink:href="/img/icons/sprites.svg#icon-arrow-rotate"></use> </svg> </span> </a> <span
-                            class="new-products__label">Скоро в продаже</span></div>
-                    <div class="new-products__bottom"><p class="new-products__cat">Crazy Zombie</p> <a href=""
-                                                                                                       class="new-products__title brodway-font">
-                            Карамель на палочке с шипучкой </a></div>
-                </div>
+
+                <?php
+
+                        // в данном случае посты выводятся просто в виде ссылок
+//                        echo '<a href="' . get_permalink( $relation_query->post->ID ) . '">' . $relation_query->post->post_title . '</a>';
+                    endwhile;
+                endif;
+
+                wp_reset_postdata();
+
+                ?>
+
             </div>
         </div>
     </div>

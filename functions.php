@@ -130,6 +130,7 @@ require_once get_stylesheet_directory() . '/utilities/category-filter/category-f
 require_once get_stylesheet_directory() . '/utilities/category-filter/filter-functions.php';
 require_once get_stylesheet_directory() . '/utilities/category-filter/filter-posts.php';
 
+add_theme_support( 'post-thumbnails', array( 'post' ) );
 
 // хук для регистрации
 add_action( 'init', 'create_taxonomy' );
