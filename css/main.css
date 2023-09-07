@@ -758,3 +758,31 @@ button{-webkit-appearance:button;-moz-appearance:button;appearance:button}.butto
 .new-products .slick-slide:nth-child(4n+4) .new-products__item .new-products__preview {
   background-color: #fdc3e3;
 }
+
+.product-preview__slide .product-preview__slide-item {
+  max-height: 520px;
+}
+.product-preview__slide .product-preview__slide-item img {
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+   max-height: calc(460px * var(--zoom));
+}
+
+
+.product-preview__slide-main {
+  position: relative;
+}
+.product-preview__slide-main .product-preview__label {
+  background: #05020c;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 16px;
+  left: 24px;
+  line-height: 150%;
+  padding: 3px 16px;
+  position: absolute;
+  top: 24px;
+  z-index: 100;
+}

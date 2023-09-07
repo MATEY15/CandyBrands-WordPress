@@ -2,10 +2,6 @@
 
 <main>
     <?php if ( function_exists( 'dimox_breadcrumbs' ) ) dimox_breadcrumbs(); ?>
-        <?php
-        $thumbnail_attributes = wp_get_attachment_image_src( get_post_thumbnail_id(), 'medium' ); // возвращает массив параметров миниатюры
-        echo $thumbnail_attributes[0];
-        ?>
     <div class="product-preview">
         <div class="product-preview__head layout">
             <h1 class="h4-style">
@@ -26,13 +22,13 @@
                     <?php endif; ?>
                 </div>
                 <div class="product-preview__slide-main">
+                    <span class="product-preview__label">Новинка</span>
                     <div class="product-preview__slide">
                         <?php
 
                         if( have_rows('product_repeat_images') ): ?>
                             <?php while ( have_rows('product_repeat_images') ) : the_row(); ?>
                                 <div class="product-preview__slide-item">
-                                    <span class="product-preview__label">Новинка</span>
                                     <img src="<?php the_sub_field('product_repeat_image'); ?>" alt="">
                                 </div>
                             <?php endwhile; ?>
@@ -40,16 +36,17 @@
                     </div>
                 </div>
                 <div class="product-preview__info">
+
+                    <?php  if( have_rows('product_slide_content') ): ?>
+                    <?php while ( have_rows('product_slide_content') ) : the_row(); ?>
                     <div class="product-preview__info-item">
                         <div class="product-preview__info-img">
-                            <img src="<?php bloginfo('stylesheet_directory'); ?>/img/product-preview/product-preview-info-1.png" alt=""></div>
-                        <span> Производитель: Китай </span>
+                            <img src="<?php the_sub_field('product_slide_img'); ?>" alt="">
+                        </div>
+                        <span><?php the_sub_field('product_slide_text'); ?></span>
                     </div>
-                    <div class="product-preview__info-item">
-                        <div class="product-preview__info-img">
-                            <img src="<?php bloginfo('stylesheet_directory'); ?>/img/product-preview/product-preview-info-2.png" alt=""></div>
-                        <span> Натуральные красители </span>
-                    </div>
+                    <?php endwhile; ?>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="product-preview__description">
@@ -74,10 +71,26 @@
                     </a>
                 </dl>
                 <ul class="product-preview__characteristic">
-                    <li><strong>Вес:</strong> <span>20 г</span></li>
-                    <li><strong>Вложение:</strong> <span>1 х 20 х 300</span></li>
-                    <li><strong>Вкус(ы):</strong> <span>клубника, малина, апельсин, мандарин, ежевика, клубника</span>
+
+                <?php if(get_field('product_weight')) { ?>
+                    <li><strong>Вес45:</strong> <span><?php echo get_field('product_weight'); ?></span></li>
+                <?php } ?>
+                <?php if(get_field('product_inside')) { ?>
+                    <li><strong>Вложение:</strong> <span><?php echo get_field('product_inside'); ?></span></li>
+                <?php } ?>
+                <?php if(get_field('product_tastes')) { ?>
+                    <li><strong>Вкус(ы):</strong> <span><?php echo get_field('product_tastes'); ?></span></li>
+                <?php } ?>
+
+                <?php  if( have_rows('product_repeat_characteristic') ): ?>
+                    <?php while ( have_rows('product_repeat_characteristic') ) : the_row(); ?>
+                    <li>
+                        <strong><?php the_sub_field('product_repeat_name'); ?>:</strong>
+                        <span><?php the_sub_field('product_repeat_char'); ?></span>
                     </li>
+                    <?php endwhile; ?>
+                <?php endif; ?>
+
                 </ul>
             </div>
         </div>
@@ -124,9 +137,11 @@
                 <div class="new-products__item">
                     <div class="new-products__top">
                         <a href="<?php echo get_permalink( $relation_query->post->ID )?>" class="new-products__preview">
+                            <?php
+                            $thumbnail_url = wp_get_attachment_image_src( get_post_thumbnail_id($relation_query->post->ID), 'full' );
+                            ?>
                             <picture>
-                                <source type="image/png" srcset="<?php bloginfo('stylesheet_directory'); ?>/img/new-products/new-products-1-1x.png, /img/new-products/new-products-1-3x.png 3x">
-                                <img src="<?php bloginfo('stylesheet_directory'); ?>/img/new-products/new-products-1-3x.png" width="305" alt="<?php echo $relation_query->post->post_title; ?>">
+                                <img src="<?php echo $thumbnail_url[0]; ?>" width="305" alt="<?php echo $relation_query->post->post_title; ?>">
                             </picture>
                             <span class="new-products__arrow">
                                 <svg class="icon-arrow-rotate" width="39px" height="39px">

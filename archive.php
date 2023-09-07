@@ -192,8 +192,7 @@
                                         <span class="product__label"><?php echo $term_text; ?></span>
                                         <?php } ?>
                                         <a href="<?php the_permalink(); ?>" class="product__image">
-                                            <?php echo the_post_thumbnail('full'); ?>
-                                            <img src="<?php bloginfo('stylesheet_directory'); ?>/img/product/product-1.png" alt="<?php the_title(); ?>">
+                                            <img src="<?php the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
                                         </a>
                                     </div>
                                     <div class="product__bottom">

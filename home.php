@@ -55,9 +55,11 @@ Template Name: Home Page
                     <div class="new-products__item">
                         <div class="new-products__top">
                             <a href="<?php the_permalink(); ?>" class="new-products__preview">
+                                <?php
+                                $thumbnail_url = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'full' );
+                                ?>
                                 <picture>
-                                    <source type="image/png" srcset="<?php echo bloginfo('stylesheet_directory'); ?>/img/new-products/new-products-1-1x.png, <?php echo bloginfo('stylesheet_directory'); ?>/img/new-products/new-products-1-3x.png 3x">
-                                    <img src="<?php echo bloginfo('stylesheet_directory'); ?>/img/new-products/new-products-1-3x.png" width="305" alt="Candy Preview">
+                                    <img src="<?php echo $thumbnail_url[0]; ?>" width="305" alt="Candy Preview">
                                 </picture>
                                 <span class="new-products__arrow">
                                 <svg class="icon-arrow-rotate" width="39px" height="39px">
