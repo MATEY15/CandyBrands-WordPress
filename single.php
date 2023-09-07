@@ -2,6 +2,10 @@
 
 <main>
     <?php if ( function_exists( 'dimox_breadcrumbs' ) ) dimox_breadcrumbs(); ?>
+        <?php
+        $thumbnail_attributes = wp_get_attachment_image_src( get_post_thumbnail_id(), 'medium' ); // возвращает массив параметров миниатюры
+        echo $thumbnail_attributes[0];
+        ?>
     <div class="product-preview">
         <div class="product-preview__head layout">
             <h1 class="h4-style">
@@ -11,44 +15,39 @@
         <div class="product-preview__wrapper layout">
             <div class="product-preview__slide-wrapper">
                 <div class="product-preview__nav">
-                    <div class="product-preview__slide-item"><img src="/img/product-preview/product-preview-1.png"
-                                                                  alt=""></div>
-                    <div class="product-preview__slide-item"><img src="/img/product-preview/product-preview-1.png"
-                                                                  alt=""></div>
-                    <div class="product-preview__slide-item"><img src="/img/product-preview/product-preview-1.png"
-                                                                  alt=""></div>
-                    <div class="product-preview__slide-item"><img src="/img/product-preview/product-preview-1.png"
-                                                                  alt=""></div>
-                    <div class="product-preview__slide-item"><img src="/img/product-preview/product-preview-1.png"
-                                                                  alt=""></div>
-                    <div class="product-preview__slide-item"><img src="/img/product-preview/product-preview-1.png"
-                                                                  alt=""></div>
+                    <?php
+
+                    if( have_rows('product_repeat_images') ): ?>
+                        <?php while ( have_rows('product_repeat_images') ) : the_row(); ?>
+                            <div class="product-preview__slide-item">
+                                <img src="<?php the_sub_field('product_repeat_image'); ?>" alt="">
+                            </div>
+                        <?php endwhile; ?>
+                    <?php endif; ?>
                 </div>
                 <div class="product-preview__slide-main">
                     <div class="product-preview__slide">
-                        <div class="product-preview__slide-item"><span class="product-preview__label">Новинка</span>
-                            <img src="/img/product-preview/product-preview-1.png" alt=""></div>
-                        <div class="product-preview__slide-item"><img src="/img/product-preview/product-preview-1.png"
-                                                                      alt=""></div>
-                        <div class="product-preview__slide-item"><span class="product-preview__label">Новинка</span>
-                            <img src="/img/product-preview/product-preview-1.png" alt=""></div>
-                        <div class="product-preview__slide-item"><img src="/img/product-preview/product-preview-1.png"
-                                                                      alt=""></div>
-                        <div class="product-preview__slide-item"><span class="product-preview__label">Новинка</span>
-                            <img src="/img/product-preview/product-preview-1.png" alt=""></div>
-                        <div class="product-preview__slide-item"><img src="/img/product-preview/product-preview-1.png"
-                                                                      alt=""></div>
+                        <?php
+
+                        if( have_rows('product_repeat_images') ): ?>
+                            <?php while ( have_rows('product_repeat_images') ) : the_row(); ?>
+                                <div class="product-preview__slide-item">
+                                    <span class="product-preview__label">Новинка</span>
+                                    <img src="<?php the_sub_field('product_repeat_image'); ?>" alt="">
+                                </div>
+                            <?php endwhile; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="product-preview__info">
                     <div class="product-preview__info-item">
                         <div class="product-preview__info-img">
-                            <img src="/img/product-preview/product-preview-info-1.png" alt=""></div>
+                            <img src="<?php bloginfo('stylesheet_directory'); ?>/img/product-preview/product-preview-info-1.png" alt=""></div>
                         <span> Производитель: Китай </span>
                     </div>
                     <div class="product-preview__info-item">
                         <div class="product-preview__info-img">
-                            <img src="/img/product-preview/product-preview-info-2.png" alt=""></div>
+                            <img src="<?php bloginfo('stylesheet_directory'); ?>/img/product-preview/product-preview-info-2.png" alt=""></div>
                         <span> Натуральные красители </span>
                     </div>
                 </div>
@@ -113,7 +112,7 @@
         <div class="layout">
             <div class="new-products__heading">
                 <h2 class="h2-style">
-                    <img class="icon-heading" src="/img/icons/icon-cl.svg" alt="">
+                    <img class="icon-heading" src="<?php bloginfo('stylesheet_directory'); ?>/img/icons/icon-cl.svg" alt="">
                     Похожие товары
                 </h2>
                 <div class="new-products__navigation"></div>
@@ -124,14 +123,14 @@
 
                 <div class="new-products__item">
                     <div class="new-products__top">
-                        <a href="#" class="new-products__preview" style="background-color:#afe7f3">
+                        <a href="<?php echo get_permalink( $relation_query->post->ID )?>" class="new-products__preview">
                             <picture>
-                                <source type="image/png" srcset="/img/new-products/new-products-1-1x.png, /img/new-products/new-products-1-3x.png 3x">
-                                <img src="/img/new-products/new-products-1-3x.png" width="305" alt="Candy Preview">
+                                <source type="image/png" srcset="<?php bloginfo('stylesheet_directory'); ?>/img/new-products/new-products-1-1x.png, /img/new-products/new-products-1-3x.png 3x">
+                                <img src="<?php bloginfo('stylesheet_directory'); ?>/img/new-products/new-products-1-3x.png" width="305" alt="<?php echo $relation_query->post->post_title; ?>">
                             </picture>
                             <span class="new-products__arrow">
                                 <svg class="icon-arrow-rotate" width="39px" height="39px">
-                                    <use xlink:href="/img/icons/sprites.svg#icon-arrow-rotate"></use>
+                                    <use xlink:href="<?php bloginfo('stylesheet_directory'); ?>/img/icons/sprites.svg#icon-arrow-rotate"></use>
                                 </svg>
                             </span>
                         </a>
@@ -157,7 +156,7 @@
                         $terms = get_the_terms($relation_query->post->ID, CATALOG_TAXONOMY);
                         ?>
                         <p class="new-products__cat"><?php echo $terms[0]->name; ?></p>
-                        <a href="<?php echo get_permalink( $relation_query->post->ID )?>" class="new-products__title brodway-font"><?php echo $relation_query->post->post_title?></a>
+                        <a href="<?php echo get_permalink( $relation_query->post->ID )?>" class="new-products__title brodway-font"><?php echo $relation_query->post->post_title; ?></a>
                     </div>
                 </div>
 

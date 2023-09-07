@@ -269,7 +269,6 @@ Template Name: Home Page
                         <?php endif; ?>
                     <?php endwhile; ?>
                 <?php endif; ?>
-
             </div>
         </div>
     </div>

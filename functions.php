@@ -176,6 +176,8 @@ function create_taxonomy(){
     ] );
 }
 
+add_theme_support( 'post-thumbnails', array( 'catalog' ) );
+
 //function vardump($var) {
 //    echo '<pre>';
 //    var_dump($var);
