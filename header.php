@@ -9,10 +9,10 @@
     <meta property="og:description" content=""/>
     <meta property="og:type" content="website"/>
     <link rel="canonical" href="https://url/"/>
-    <link rel="shortcut icon" href="/favicon/favicon.ico?b155d972" type="image/x-icon">
-    <link rel="shortcut icon" href="/img/favicon/apple-touch-icon.png" type="image/x-icon">
-    <link rel="shortcut icon" href="/img/favicon/apple-touch-icon-72x72.png" type="image/x-icon">
-    <link rel="shortcut icon" href="/img/favicon/apple-touch-icon-144x144.png" type="image/x-icon">
+    <link rel="shortcut icon" href="<?php bloginfo('stylesheet_directory'); ?>/img/favicon/favicon.ico?b155d972" type="image/x-icon">
+    <link rel="shortcut icon" href="<?php bloginfo('stylesheet_directory'); ?>/img/favicon/apple-touch-icon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="<?php bloginfo('stylesheet_directory'); ?>/img/favicon/apple-touch-icon-72x72.png" type="image/x-icon">
+    <link rel="shortcut icon" href="<?php bloginfo('stylesheet_directory'); ?>/img/favicon/apple-touch-icon-144x144.png" type="image/x-icon">
     <title>CandyBrands</title>
     <meta name="description" content="">
     <meta name="keywords" content=""/>

@@ -786,3 +786,10 @@ button{-webkit-appearance:button;-moz-appearance:button;appearance:button}.butto
   top: 24px;
   z-index: 100;
 }
+.header__sub-menu a:after {
+  display: none !important;
+}
+
+.product__item--hide {
+  display: none;
+}

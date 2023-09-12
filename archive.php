@@ -92,9 +92,22 @@
                 $requirementsBrand = array( // Для бренда передать TAXONOMY_TYPE
                     array(
                         'taxonomy' => CATALOG_TAXONOMY,
-                        'term' => ['kislitsa', 'crazy-zombie', 'my-printsessa']
+                        'term' => getAllBrands()
                     )
                 );
+
+                function getAllBrands() {
+                    $terms = [];
+                    $categories = get_categories( [
+                        'taxonomy'     => CATALOG_TAXONOMY,
+                        'type'         => 'post',
+                        'order'        => 'ASC',
+                    ] );
+                    $slugs = array_map(function($term) {
+                        return $term->slug;
+                    }, $categories);
+                    return $slugs;
+                }
 
                 $requirementsType = array( // Для Типа
 //                    array(
@@ -149,6 +162,7 @@
 
                 if($result) {
 
+                $posts_displayed = 2;
                 // Создаем массив для группировки постов по категориям
                 $posts_by_category = [];
 
@@ -164,6 +178,7 @@
 
                 if($posts_by_category) {
                 // Выводим посты по категориям
+                    $count = 0;
                 foreach ($posts_by_category as $category_id => $category_posts) {
                     $categoryName = get_term( $category_id , $checkedTaxonomyView); // Сюда тип для фильтра
                     ?>
@@ -178,6 +193,7 @@
                         <div class="product__wrapper">
                             <?php foreach ($category_posts as $post) {
                                 setup_postdata($post);
+                                if ($count < $posts_displayed) {
                                 ?>
                                 <div class="product__item">
                                     <div class="product__top">
@@ -202,7 +218,34 @@
                                         <a href="<?php the_permalink(); ?>" class="product__name"><?php the_title(); ?></a>
                                     </div>
                                 </div>
-                            <?php } ?>
+                            <?php } else { ?>
+                                <div class="product__item product__item--hide">
+                                    <div class="product__top">
+                                        <?php
+                                        $terms = get_the_terms(get_the_ID($post->ID), TAXONOMY_NEWS);
+
+                                        if ($terms && !is_wp_error($terms)) {
+                                            $term_names = wp_list_pluck($terms, 'name');
+                                            $term_text = implode(', ', $term_names);
+                                            $term_text === 'Новинки' ? $term_text = 'Новинка' : $term_text;
+                                            ?>
+                                            <span class="product__label"><?php echo $term_text; ?></span>
+                                        <?php } ?>
+                                        <a href="<?php the_permalink(); ?>" class="product__image">
+                                            <img src="<?php the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
+                                        </a>
+                                    </div>
+                                    <div class="product__bottom">
+                                        <?php if(get_field('product_article')) { ?>
+                                            <div class="product__article">Арт. <?php echo get_field('product_article'); ?></div>
+                                        <?php } ?>
+                                        <a href="<?php the_permalink(); ?>" class="product__name"><?php the_title(); ?></a>
+                                    </div>
+                                </div>
+                            <?php
+                                }
+                                    $count++;
+                            } ?>
                         </div>
                         <div class="product__button">
                             <a href="#" class="button button--medium button--yellow">Показать еще</a>

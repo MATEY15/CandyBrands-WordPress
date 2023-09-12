@@ -11,9 +11,7 @@
         <div class="product-preview__wrapper layout">
             <div class="product-preview__slide-wrapper">
                 <div class="product-preview__nav">
-                    <?php
-
-                    if( have_rows('product_repeat_images') ): ?>
+                    <?php if( have_rows('product_repeat_images') ): ?>
                         <?php while ( have_rows('product_repeat_images') ) : the_row(); ?>
                             <div class="product-preview__slide-item">
                                 <img src="<?php the_sub_field('product_repeat_image'); ?>" alt="">
@@ -22,7 +20,21 @@
                     <?php endif; ?>
                 </div>
                 <div class="product-preview__slide-main">
-                    <span class="product-preview__label">Новинка</span>
+                    <?php
+                    $terms = get_the_terms(get_the_ID(), TAXONOMY_NEWS);
+                    if($terms[0]->name) {
+                        ?>
+                        <span class="product-preview__label">
+                                <?php
+
+                                if($terms[0]->name === 'Новинки') {
+                                    echo 'Новинка';
+                                } else {
+                                    echo $terms[0]->name;
+                                }
+                                ?>
+                            </span>
+                    <?php } ?>
                     <div class="product-preview__slide">
                         <?php
 
@@ -73,7 +85,7 @@
                 <ul class="product-preview__characteristic">
 
                 <?php if(get_field('product_weight')) { ?>
-                    <li><strong>Вес45:</strong> <span><?php echo get_field('product_weight'); ?></span></li>
+                    <li><strong>Вес:</strong> <span><?php echo get_field('product_weight'); ?></span></li>
                 <?php } ?>
                 <?php if(get_field('product_inside')) { ?>
                     <li><strong>Вложение:</strong> <span><?php echo get_field('product_inside'); ?></span></li>

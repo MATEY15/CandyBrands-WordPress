@@ -41,6 +41,25 @@
 <div class="overlay"></div>
 <?php wp_footer(); ?>
 <script>
+
+    jQuery(document).ready(function ($) {
+        var allButtons = $('.product__button button.button');
+        allButtons.each(function (item) {
+            console.log(item)
+        })
+        $('.product__button a').on('click', function (e) {
+            e.preventDefault();
+            var $hiddenItems = $('.product__item--hide');
+            if ($hiddenItems.length > 0) {
+                var itemsToShow = 6; // Количество постов для отображения при каждом клике
+                $hiddenItems.slice(0, itemsToShow).removeClass('product__item--hide');
+                if ($hiddenItems.length <= itemsToShow) {
+                    $(this).hide(); // Скрываем кнопку "Показать еще", если не осталось скрытых постов
+                }
+            }
+        });
+    });
+
     // jQuery( function( $ ){
     //     let eventRequest = null;
     //     let url;
