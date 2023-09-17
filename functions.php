@@ -198,3 +198,38 @@ function add_filter_archive_event() {
 }
 
 
+
+function load_more_posts() {
+    $page = $_POST['catalog'];
+
+    var_dump($page);
+    var_dump('$page');
+
+    // Ваш код для запроса и вывода постов с учетом текущей страницы $page
+    // Этот код должен быть аналогичен коду, который вы использовали для вывода постов ранее, но с добавлением параметра 'paged' => $page.
+
+    // Здесь вы должны сгенерировать HTML-код для новых постов и вернуть его через AJAX
+    // Пример:
+    ob_start();
+
+    // Ваш код для вывода постов, например:
+    echo 'Hi there';
+//    foreach ($category_posts as $post) {
+//        setup_postdata($post);
+//        ?>
+<!--        <div class="product__item">-->
+<!--            Ваш HTML-код для отображения поста -->
+<!--        </div>-->
+<!--        --><?php
+//    }
+
+    $output = ob_get_clean();
+
+    echo $output;
+    die();
+}
+
+add_action('wp_ajax_load_more_posts', 'load_more_posts');
+add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts');
+
+

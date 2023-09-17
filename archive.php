@@ -77,17 +77,203 @@
                 }
                 $resultSort = createFilterRequest($getRequest);
 
-//                vardump('$resultSort');
 //                vardump($resultSort);
-//                vardump('$resultSort');
+                echo "<br>";
+                vardump('----------------*-------------');
+                echo "<br>";
 
-                function createRequirements($name, $slugs) {
-
-//                    foreach (TAXONOMYES as $taxonomyUrl) {
-//                        foreach (TAXONOMYES as $taxonomyUrl) {
-//                        }
-//                    }
+                function getAllTaxonomies($taxonomy) {
+                    $terms = [];
+                    $categories = get_categories( [
+                        'taxonomy'     => $taxonomy,
+                        'type'         => 'post',
+                        'order'        => 'ASC',
+                    ] );
+                    $slugs = array_map(function($term) {
+                        return $term->slug;
+                    }, $categories);
+                    return $slugs;
                 }
+
+                if($resultSort) {
+                    foreach ($resultSort as $item) {
+                        if($item["taxonomy"] === CATALOG_TAXONOMY) {
+                            createBlockFilterBrand($item["term"], $resultSort);
+                        }
+                        if($item["taxonomy"] === TAXONOMY_TYPE) {
+                            createBlockFilter($item["term"], getAllTaxonomies(CATALOG_TAXONOMY));
+                        }
+                    }
+                }
+
+                function createBlockFilter($cat, $arr) {
+                    foreach ($arr as $item) {
+                        vardump($item);
+                        wp_reset_query();
+                        $query = array(
+                            'posts_per_page' => -1,
+                            'post_type' => CATALOG_TYPE,
+                            'tax_query' => array()
+                        );
+                        $query['tax_query'] = array(
+                            'relation' => 'AND',
+                        );
+                        $query['tax_query'][] =  array(
+                            'taxonomy' => TAXONOMY_TYPE,
+                            'terms' => $cat,
+                            'field' => 'slug',
+                        );
+                        foreach($arr as $param) {
+                            $query['tax_query'][] =  array(
+                                'taxonomy' => CATALOG_TAXONOMY,
+                                'terms' => $item,
+                                'field' => 'slug',
+                            );
+                        }
+
+//                        vardump($query);
+
+                        $productQuery = new WP_Query($query);
+                        if($productQuery->have_posts()) {
+                            while ( $productQuery->have_posts() ) {
+                                $productQuery->the_post();
+                                echo get_field('product_article');
+                                echo the_title();
+                                echo "<br>";
+                            }
+                        }
+                        echo "<br>";
+                        echo "<br>";
+
+
+                        $big = 999999999; // need an unlikely integer
+                        echo paginate_links(
+                            array(
+                                'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+                                'format' => '?paged=%#%',
+                                'current' => max(
+                                    1,
+                                    get_query_var('paged')
+                                ),
+                                'total' => $query->max_num_pages //$q is your custom query
+                            )
+                        );
+                        wp_reset_postdata();
+
+                    }
+                }
+
+                function createBlockFilterBrand($cat, $arr) {
+                    foreach ($cat as $item) {
+                        vardump($item);
+                        wp_reset_query();
+                        $query = array(
+                            'posts_per_page' => -1,
+                            'post_type' => CATALOG_TYPE,
+                            'tax_query' => array()
+                        );
+                        $query['tax_query'] = array(
+                            'relation' => 'AND',
+                        );
+                        $query['tax_query'][] =  array(
+                            'taxonomy' => CATALOG_TAXONOMY,
+                            'terms' => $item,
+                            'field' => 'slug',
+                        );
+                        foreach($arr as $param) {
+                            if($param["taxonomy"] === TAXONOMY_TYPE || $param["taxonomy"] === TAXONOMY_NEWS) {
+                                $query['tax_query'][] =  array(
+                                    'taxonomy' => $param["taxonomy"],
+                                    'terms' => $param["term"],
+                                    'field' => 'slug',
+                                );
+                            }
+                        }
+
+                        $productQuery = new WP_Query($query);
+                        if($productQuery->have_posts()) {
+                            while ( $productQuery->have_posts() ) {
+                                $productQuery->the_post();
+                                echo get_field('product_article');
+                                echo the_title();
+                                echo "<br>";
+                            }
+                        }
+                        echo "<br>";
+                        echo "<br>";
+
+
+                        $big = 999999999; // need an unlikely integer
+                        echo paginate_links(
+                            array(
+                                'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+                                'format' => '?paged=%#%',
+                                'current' => max(
+                                    1,
+                                    get_query_var('paged')
+                                ),
+                                'total' => $productQuery->max_num_pages //$q is your custom query
+                            )
+                        );
+                        wp_reset_postdata();
+
+                    }
+                }
+
+                echo "<br>";
+                vardump('----------------*-------------');
+                echo "<br>";
+
+
+//                function createTaxQuery($getCategory) {
+//                    wp_reset_query();
+//                    $query = array(
+//                        'posts_per_page' => -1,
+//                        'post_type' => CATALOG_TYPE,
+//                        'tax_query' => array()
+//                    );
+//
+//                    $query['tax_query'] = array(
+//                        'relation' => 'AND',
+//                    );
+//                    foreach($getCategory as $param){
+//                        $query['tax_query'][] =  array(
+//                            'taxonomy' => $param["taxonomy"],
+//                            'terms' => $param["term"],
+//                            'field' => 'slug',
+//                        );
+//                    }
+//                    return $query;
+//                }
+
+//                $query = new WP_Query( createTaxQuery($resultSort) );
+//                while ( $query->have_posts() ) {
+//                    $query->the_post();
+//
+//                    echo the_title();
+//                    echo "<br>";
+//                }
+
+//                $big = 999999999; // need an unlikely integer
+//                echo paginate_links(
+//                    array(
+//                        'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+//                        'format' => '?paged=%#%',
+//                        'current' => max(
+//                            1,
+//                            get_query_var('paged')
+//                        ),
+//                        'total' => $query->max_num_pages //$q is your custom query
+//                    )
+//                );
+
+//                wp_reset_postdata();
+
+
+                echo "<br>";
+                vardump('----------------*-------------');
+                echo "<br>";
+
 
                 $requirementsBrand = array( // Для бренда передать TAXONOMY_TYPE
                     array(
@@ -154,6 +340,7 @@
 
                 $result = null;
                 if($resultSort !== null) {
+                    vardump($resultSort);
                     $result = fruit_query_mult_tax($resultSort, 'AND');
                 } else {
                     $checkedTaxonomyView = CATALOG_TAXONOMY;
@@ -162,7 +349,6 @@
 
                 if($result) {
 
-                $posts_displayed = 2;
                 // Создаем массив для группировки постов по категориям
                 $posts_by_category = [];
 
@@ -176,9 +362,11 @@
                     }
                 }
 
+//                vardump($posts_by_category);
+
                 if($posts_by_category) {
                 // Выводим посты по категориям
-                    $count = 0;
+                $count = 2;
                 foreach ($posts_by_category as $category_id => $category_posts) {
                     $categoryName = get_term( $category_id , $checkedTaxonomyView); // Сюда тип для фильтра
                     ?>
@@ -193,7 +381,6 @@
                         <div class="product__wrapper">
                             <?php foreach ($category_posts as $post) {
                                 setup_postdata($post);
-                                if ($count < $posts_displayed) {
                                 ?>
                                 <div class="product__item">
                                     <div class="product__top">
@@ -218,37 +405,11 @@
                                         <a href="<?php the_permalink(); ?>" class="product__name"><?php the_title(); ?></a>
                                     </div>
                                 </div>
-                            <?php } else { ?>
-                                <div class="product__item product__item--hide">
-                                    <div class="product__top">
-                                        <?php
-                                        $terms = get_the_terms(get_the_ID($post->ID), TAXONOMY_NEWS);
+                            <?php } ?>
 
-                                        if ($terms && !is_wp_error($terms)) {
-                                            $term_names = wp_list_pluck($terms, 'name');
-                                            $term_text = implode(', ', $term_names);
-                                            $term_text === 'Новинки' ? $term_text = 'Новинка' : $term_text;
-                                            ?>
-                                            <span class="product__label"><?php echo $term_text; ?></span>
-                                        <?php } ?>
-                                        <a href="<?php the_permalink(); ?>" class="product__image">
-                                            <img src="<?php the_post_thumbnail_url(); ?>" alt="<?php the_title(); ?>">
-                                        </a>
-                                    </div>
-                                    <div class="product__bottom">
-                                        <?php if(get_field('product_article')) { ?>
-                                            <div class="product__article">Арт. <?php echo get_field('product_article'); ?></div>
-                                        <?php } ?>
-                                        <a href="<?php the_permalink(); ?>" class="product__name"><?php the_title(); ?></a>
-                                    </div>
-                                </div>
-                            <?php
-                                }
-                                    $count++;
-                            } ?>
                         </div>
                         <div class="product__button">
-                            <a href="#" class="button button--medium button--yellow">Показать еще</a>
+                            <a href="#" class="button button--medium button--yellow load-more-posts" data-page="1">Показать еще</a>
                         </div>
                     </div>
 

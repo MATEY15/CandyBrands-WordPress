@@ -42,49 +42,78 @@
 <?php wp_footer(); ?>
 <script>
 
-    jQuery(document).ready(function ($) {
-        var allButtons = $('.product__button button.button');
-        allButtons.each(function (item) {
-            console.log(item)
-        })
-        $('.product__button a').on('click', function (e) {
-            e.preventDefault();
-            var $hiddenItems = $('.product__item--hide');
-            if ($hiddenItems.length > 0) {
-                var itemsToShow = 6; // Количество постов для отображения при каждом клике
-                $hiddenItems.slice(0, itemsToShow).removeClass('product__item--hide');
-                if ($hiddenItems.length <= itemsToShow) {
-                    $(this).hide(); // Скрываем кнопку "Показать еще", если не осталось скрытых постов
-                }
-            }
-        });
-    });
+    //jQuery(document).ready(function ($) {
+    //    var $loadMoreButtons = $('.load-more-posts');
+    //    $loadMoreButtons.on('click', function (e) {
+    //        e.preventDefault();
+    //        var $button = $(this);
+    //        var page = $button.data('page');
+    //        var $wrapper = $button.closest('.product__category').find('.product__wrapper');
+    //
+    //        // Запрос на сервер через AJAX
+    //        $.ajax({
+    //            url: '<?php //echo admin_url('admin-ajax.php'); ?>//',
+    //            type: 'POST',
+    //            data: {
+    //                action: 'load_more_posts',
+    //                page: page,
+    //                // Другие данные, которые вы можете передать на сервер
+    //            },
+    //            success: function (response) {
+    //                if (response) {
+    //                    $wrapper.append(response); // Добавляем полученные посты на страницу
+    //                    $button.data('page', page + 1); // Увеличиваем номер страницы для следующего запроса
+    //                } else {
+    //                    $button.hide(); // Скрываем кнопку, если нет больше постов
+    //                }
+    //            }
+    //        });
+    //    });
+    //});
 
-    // jQuery( function( $ ){
-    //     let eventRequest = null;
-    //     let url;
-    //     $(document.body).on('click', '.go-ajax a', function (e) {
+    // jQuery(document).ready(function ($) {
+    //     var allButtons = $('.product__button button.button');
+    //     allButtons.each(function (item) {
+    //         console.log(item)
+    //     })
+    //     $('.product__button a').on('click', function (e) {
     //         e.preventDefault();
-    //         url = $(this).attr('href');
-    //         $('.catalog__wrapper').addClass('AJAX');
-    //         $(document.body).trigger('event_filter_ajax_request', url)
-    //     });
-    //     $(document.body).on('event_filter_ajax_request', function (e, url, el) {
-    //         console.log(url);
-    //         let content = $('.catalog__wrapper');
-    //         if(url.slice(-1) === '?') {
-    //             url = url.slice(0, -1);
+    //         var $hiddenItems = $('.product__item--hide');
+    //         if ($hiddenItems.length > 0) {
+    //             var itemsToShow = 6; // Количество постов для отображения при каждом клике
+    //             $hiddenItems.slice(0, itemsToShow).removeClass('product__item--hide');
+    //             if ($hiddenItems.length <= itemsToShow) {
+    //                 $(this).hide(); // Скрываем кнопку "Показать еще", если не осталось скрытых постов
+    //             }
     //         }
-    //         url = url.replace(/%2C/, ',');
-    //         if(eventRequest) {
-    //             eventRequest.abort();
-    //         }
-    //         $.get(url, function (res) {
-    //             content.replaceWith($(res).find('.catalog__wrapper'));
-    //             $('.catalog__wrapper').removeClass('AJAX');
-    //         }, 'html');
     //     });
     // });
+
+    jQuery( function( $ ){
+        let eventRequest = null;
+        let url;
+        $(document.body).on('click', '.load-more-posts', function (e) {
+            e.preventDefault();
+            url = $(this).attr('href');
+            $('.catalog__wrapper').addClass('AJAX');
+            $(document.body).trigger('event_filter_ajax_request', url)
+        });
+        $(document.body).on('event_filter_ajax_request', function (e, url, el) {
+            console.log(url);
+            let content = $('.catalog__wrapper');
+            if(url.slice(-1) === '?') {
+                url = url.slice(0, -1);
+            }
+            url = url.replace(/%2C/, ',');
+            if(eventRequest) {
+                eventRequest.abort();
+            }
+            $.get(url, function (res) {
+                content.replaceWith($(res).find('.catalog__wrapper'));
+                $('.catalog__wrapper').removeClass('AJAX');
+            }, 'html');
+        });
+    });
 
 
     // jQuery( function( $ ){
