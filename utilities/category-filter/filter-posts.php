@@ -4,6 +4,7 @@
     CONST CATALOG_TAXONOMY = 'catalog_category';
     CONST TAXONOMY_TYPE = 'catalog_type';
     CONST TAXONOMY_NEWS = 'catalog_news';
+    CONST COUNT_MESS = 2;
     CONST BRAND_SLUG = 'brand';
     CONST TAXONOMY_BRANDS = 'brands';
 
