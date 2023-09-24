@@ -101,6 +101,10 @@
                 $termsType = [];
                 $termsNews = [];
 
+                global $termsCatalog;
+                global $termsType;
+                global $termsNews;
+
                 if($resultSort) {
 
 //                    vardump($resultSort);
@@ -260,14 +264,14 @@
                 function viewProduct($resultTaxQuery, $nameCat, $taxonomy) {
                     $productQuery = new WP_Query($resultTaxQuery);
 
-                    global $wp_query;
+//                    global $wp_query;
                     $paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
-                    $max_pages = $wp_query->max_num_pages;
+                    $max_pages = $productQuery->max_num_pages;
 
-                    vardump($paged);
-                    vardump($max_pages);
+//                    vardump($max_pages);
 
                     ?>
+
                     <div class="product__category">
                         <div class="product__heading">
                             <h3 class="h4-style">
@@ -328,30 +332,79 @@
 
                             ?>
                         </div>
-                        <div class="product__button">
-                            <?php
-                                $big = 999999999; // need an unlikely integer
-                                echo paginate_links(
-                                    array(
-                                        'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
-                                        'format' => '?paged=%#%',
-                                        'current' => max(
-                                            1,
-                                            get_query_var('paged')
-                                        ),
-                                        'total' => $productQuery->max_num_pages //$q is your custom query
-                                    )
-                                );
-                            ?>
-                            <a href="#" class="button button--medium button--yellow load-more-posts" data-page="1">Показать еще</a>
-                        </div>
+
+<!--                        <div class="product__button">-->
+<!--                            --><?php
+//                                $big = 999999999; // need an unlikely integer
+//                                echo paginate_links(
+//                                    array(
+//                                        'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+//                                        'format' => '?paged=%#%',
+//                                        'current' => max(
+//                                            1,
+//                                            get_query_var('paged')
+//                                        ),
+//                                        'total' => $productQuery->max_num_pages //$q is your custom query
+//                                    )
+//                                );
+//                            ?>
+<!--                            <a href="#" class="button button--medium button--yellow load-more-posts" data-page="1">Показать еще</a>-->
+<!--                        </div>-->
                     </div>
                     <?php
                     wp_reset_postdata();
-                    wp_reset_query();
-                }
+//                    wp_reset_query();
+                } ?>
+
+                <script>
+                    jQuery(document).ready(function($) {
+                        var page = 1;
+                        var buttons = $('.load-more-posts');
+                        // var maxPages;
+
+                        // console.log($(buttons))
+
+                        $(buttons).each(function (index, item) {
+                            if($(item).attr('data-max_pages')) {
+                                var maxPages = $(item).attr('data-max_pages');
+                                $(item).on('click', function (e) {
+                                    e.preventDefault();
+                                    console.log(this);
+
+                                    if (page < maxPages) {
+                                        page++;
+                                        var data = {
+                                            action: 'load_more_posts',
+                                            page: page,
+                                            catalog: '<?php echo $termsCatalog[0]; ?>',
+                                            type: '<?php echo $termsType[0]; ?>',
+                                            news: '<?php echo $termsNews[0]; ?>'
+                                        };
+
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: '<?php echo admin_url('admin-ajax.php'); ?>',
+                                            data: data,
+                                            success: function(response) {
+                                                if (response) {
+                                                    console.log(response)
+                                                    // $('.product__wrapper').append(response);
+                                                }
+                                            }
+                                        });
+                                    }
+
+                                });
+                            }
+
+                            // console.log($(item).attr('data-max_pages'))
+                        })
 
 
+                    });
+                </script>
+
+                <?php
                 // ___________________________
 
 

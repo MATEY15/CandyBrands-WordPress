@@ -37,7 +37,79 @@ function style_theme() {
 }
 function scripts_theme() {
     wp_enqueue_script('main', get_template_directory_uri() . '/js/main.js');
+//    wp_enqueue_script('loadmore', get_template_directory_uri() . '/js/loadmore.js');
 }
+
+
+// В вашем functions.php или в отдельном плагине
+add_action('wp_enqueue_scripts', 'enqueue_ajax_scripts');
+
+function enqueue_ajax_scripts() {
+    wp_enqueue_script('jquery');
+    wp_enqueue_script('ajax-scripts', get_template_directory_uri() . '/js/ajax-scripts.js', array('jquery'), '1.0', true);
+    wp_localize_script('ajax-scripts', 'ajaxpagination', array(
+        'ajaxurl' => admin_url('admin-ajax.php'),
+        'noposts' => __('No older posts found', 'your-text-domain'),
+    ));
+}
+
+add_action('wp_ajax_load_more_posts', 'load_more_posts'); // обработка для авторизированных пользователей
+add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts'); // обработка для неавторизированных пользователей
+
+function load_more_posts() {
+    $page = $_POST['page'];
+//    $catalog = $_POST['catalog'];
+    $catalog = $_POST['catalog'];
+    $type = $_POST['type'];
+    $news = $_POST['news'];
+    print_r($catalog);
+    print_r($type);
+    print_r($news);
+
+    $query = array(
+        'posts_per_page' => 2, // Количество постов для подгрузки
+        'post_type' => 'catalog', // Замените на свой тип записей
+        'paged' => $page,
+        'tax_query' => array(
+            'relation' => 'AND',
+            array(
+                'taxonomy' => 'catalog_category', // Замените на свою таксономию
+                'terms' => $catalog,
+                'field' => 'slug',
+            ),
+            array(
+                'taxonomy' => 'catalog_type', // Замените на свою таксономию
+                'terms' => $type,
+                'field' => 'slug',
+            ),
+//            array(
+//                'taxonomy' => 'catalog_news', // Замените на свою таксономию
+//                'terms' => $news,
+//                'field' => 'slug',
+//            ),
+        ),
+    );
+
+    $posts = new WP_Query($query);
+//    print_r($posts);
+
+    if ($posts->have_posts()) :
+        while ($posts->have_posts()) : $posts->the_post();
+            // Здесь выводите содержимое каждого поста, так как в вашем примере
+            ?>
+            <div class="product__item">
+                <?php echo the_title(); ?>
+                <h1>Hi there</h1>
+                <p>I am AJAX loading</p>
+                <!-- Ваш HTML-код для вывода поста -->
+            </div>
+        <?php
+        endwhile;
+    endif;
+
+    wp_die();
+}
+
 
 // свой класс построения меню:
 class My_Walker_Nav_Menu extends Walker_Nav_Menu {
@@ -199,7 +271,7 @@ function add_filter_archive_event() {
 
 
 
-function load_more_posts() {
+function load_more_posts1() {
     $page = $_POST['catalog'];
 
     var_dump($page);
@@ -229,7 +301,7 @@ function load_more_posts() {
     die();
 }
 
-add_action('wp_ajax_load_more_posts', 'load_more_posts');
-add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts');
+//add_action('wp_ajax_load_more_posts', 'load_more_posts');
+//add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts');
 
 
