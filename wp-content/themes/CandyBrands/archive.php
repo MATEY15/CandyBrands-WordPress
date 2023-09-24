@@ -74,6 +74,7 @@ get_header();
                     ];
                 }
                 if (checkVal($taxonomyTerms)) {
+                    $count = 0;
                     foreach ($taxonomyTerms as $term) {
                         $termQuery = [
                             'taxonomy' => $term->taxonomy,
@@ -86,6 +87,7 @@ get_header();
                         if (!checkVal($result) || !$result->have_posts())
                             continue;
                         $maxNumPages = (int)$result->max_num_pages;
+                        $count++;
                         ?>
 
                         <div class="product__category">
@@ -116,7 +118,14 @@ get_header();
                             <?php endif; ?>
                         </div>
 
-                    <?php }
+                    <?php } ?>
+                    <?php
+                    if($count === 0): ?>
+                        <div class="product__error">
+                            <h3 class="h4-style">По вашему запросу ничего не найдено =(</h3>
+                            <a href="#" class="button button--medium button--white">Сбросить фильтры</a>
+                        </div>
+                    <?php endif;
                 } else { ?>
                     <div class="product__error">
                         <h3 class="h4-style">По вашему запросу ничего не найдено =(</h3>
