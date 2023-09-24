@@ -31,10 +31,6 @@
     }
 
 
-    function createPosts($value) {
-        var_dump($value);
-    }
-createPosts('$value');
 
 
     function getPostsBrands(): array {

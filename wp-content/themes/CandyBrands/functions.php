@@ -305,3 +305,69 @@ function load_more_posts1() {
 //add_action('wp_ajax_nopriv_load_more_posts', 'load_more_posts');
 
 
+/* CheckVal function init */
+function checkVal( $value = null, $checkIsset = '' ) {
+    if ( $checkIsset !== '' ) {
+        return ( ! empty( $value ) && ! is_wp_error( $value ) && isset( $value[ $checkIsset ] ) && ! empty( $value[ $checkIsset ] ) && ! is_wp_error( $value[ $checkIsset ] ) ) ? true : false;
+    } else {
+        return ( ! empty( $value ) && ! is_wp_error( $value ) ) ? true : false;
+    }
+}
+
+/* Get images shorted version */
+function get_img( $id, $size = 'full' ) {
+    if ( ! checkVal( $id ) ) {
+        return '';
+    }
+
+    return wp_get_attachment_image_url( $id, $size );
+
+}
+
+/* Get template shorted version */
+
+function get_tmpl( $dir, $args = [] ) {
+    if ( ! checkVal( $dir ) ) {
+        return;
+    }
+
+    get_template_part( "templates/{$dir}", null, $args );
+}
+
+add_action('wp_ajax_load_products_via_ajax', 'ajax_load_products_validate');
+add_action('wp_ajax_nopriv_load_products_via_ajax', 'ajax_load_products_validate');
+
+function ajax_load_products_validate(){
+    if(!checkVal($_POST['page']) || !checkVal($_POST['details'])){
+        wp_send_json([
+            'status' => 'fail',
+            'show_button' => false
+        ]);
+    }
+
+    $page = (int)$_POST['page'];
+    $details = $_POST['details'];
+    $details['paged'] = ++$page;
+    $query = new WP_Query($details);
+    $maxNumPages = $query->max_num_pages;
+    ob_start();
+    if($query->have_posts()){
+        while ($query->have_posts()){
+            $query->the_post();
+            get_tmpl('post');
+        }
+    }
+    wp_reset_query();
+    $output = ob_get_clean();
+    if($details['paged'] < $maxNumPages){
+        $showButton = true;
+    } else {
+        $showButton = false;
+    }
+
+    wp_send_json([
+        'status' => 'success',
+        'output' => $output,
+        'show_button' => $showButton
+    ]);
+}
